@@ -1,0 +1,257 @@
+<rss version="0.92">
+<channel>
+<title>Jira</title>
+<link>https://aircall-product.atlassian.net</link>
+<description>This file is an XML representation of an issue</description>
+<language>en-us</language>
+<build-info>
+<version>1001.0.0-SNAPSHOT</version>
+<build-number>100238</build-number>
+<build-date>10-10-2023</build-date>
+</build-info>
+<item>
+<title>[PH-8398] Emergency Address error handling Zip Code field</title>
+<link>https://aircall-product.atlassian.net/browse/PH-8398</link>
+<project id="10002" key="PH">Phone App</project>
+<description><div class='table-wrap'> <table class='confluenceTable'><tbody> <tr> <th class='confluenceTh'><h3><a name="%F0%9F%A7%9A%E2%80%8D%E2%99%80%EF%B8%8FStory"></a>_��‍♀️ Story_</h3></th> </tr> <tr> <td class='confluenceTd'><b>As an</b> agent*,* <br/> <b>I want to</b> be informed when my emergency address reported contained leading or trailing white spaces in the Zip code field <br/> <b>so I can</b> know which part of the address I have to amend</td> </tr> </tbody></table> </div> <div class='table-wrap'> <table class='confluenceTable'><tbody> <tr> <th class='confluenceTh'><b>�� Description / Context</b> <em>→ Business requirements, Value, Flow, Risks and Constraints, …</em></th> </tr> <tr> <td class='confluenceTd'><b>GIVEN</b>  an agent<br/> <b>WHEN</b>  introduces an emergency address<br/> <b>AND</b> the Zip code in the form contains a leading or trailing white space character <br/> <b>THEN</b> UI will inform the agent that the Zip code field must contain only numbers</td> </tr> </tbody></table> </div> <div class='table-wrap'> <table class='confluenceTable'><tbody> <tr> <th class='confluenceTh'><b>�� Acceptance criteria</b> <em>→ Happy path / NOT Happy path / Edge cases (IDEALLY: to be specified in the Smart checklist)</em></th> </tr> <tr> <td class='confluenceTd'><b><em>Included in the smart checklist</em></b></td> </tr> </tbody></table> </div> <!-- ADF macro (type = 'table') --> <!-- ADF macro (type = 'table') --></description>
+<environment/>
+<key id="303733">PH-8398</key>
+<summary>Emergency Address error handling Zip Code field</summary>
+<type id="10001" iconUrl="https://aircall-product.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium">Story</type>
+<priority id="4" iconUrl="https://aircall-product.atlassian.net/images/icons/priorities/low.svg">Low</priority>
+<status id="10001" iconUrl="https://aircall-product.atlassian.net/" description="">Done</status>
+<statusCategory id="3" key="done" colorName="green"/>
+<resolution id="10000">Done</resolution>
+<assignee accountid="5e660ab5219fb10cf9ed9494">Benjamin Oyewole</assignee>
+<reporter accountid="61a419f0fe9f300068873988">Karim Rezc gutiérrez</reporter>
+<labels>
+<label>added-during-sprint</label>
+</labels>
+<created>Thu, 9 Mar 2023 18:15:02 +0100</created>
+<updated>Fri, 30 Jun 2023 10:00:56 +0200</updated>
+<resolved>Mon, 19 Jun 2023 12:11:12 +0200</resolved>
+<fixVersion>phone@v2.89.0</fixVersion>
+<component>Settings</component>
+<due>Mon, 19 Jun 2023 00:00:00 +0000</due>
+<votes>0</votes>
+<watches>0</watches>
+<comments>
+<comment id="1232848" author="618712d126a5400071483ff5" created="Wed, 15 Mar 2023 14:31:04 +0100"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61f5d59d9e8939006944e95d" class="user-hover" rel="61f5d59d9e8939006944e95d" data-account-id="61f5d59d9e8939006944e95d" accountid="61f5d59d9e8939006944e95d" rel="noreferrer">Iván Muñoz</a> ,</p> <p>Do you know if the backend can send us specific error code instead of the RAW bandwidth response.</p> <p>In that case, we will be able to rely on this to display the correct message</p> <p>Thank you</p> <p>cc <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=5f155638ce15e80026734127" class="user-hover" rel="5f155638ce15e80026734127" data-account-id="5f155638ce15e80026734127" accountid="5f155638ce15e80026734127" rel="noreferrer">Fabien Couet</a></p></comment>
+<comment id="1232903" author="5f155638ce15e80026734127" created="Wed, 15 Mar 2023 14:55:41 +0100"><p>cc: <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> </p></comment>
+<comment id="1234974" author="61998592fe9f30006818b980" created="Mon, 20 Mar 2023 12:42:51 +0100"><p>Hi <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> and <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=5f155638ce15e80026734127" class="user-hover" rel="5f155638ce15e80026734127" data-account-id="5f155638ce15e80026734127" accountid="5f155638ce15e80026734127" rel="noreferrer">Fabien Couet</a> ! </p> <p>I have different approaches. The Backend error response always follow this structure:</p> <div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent"> <pre>{ statusCode: 4XX or 5XX body: { name: '' message: '' } }</pre> </div></div> <p>When some field is invalid we return 400 and name BadRequest in the name. </p> <ul class="alternate" type="square"> <li>First approach is change name and return something like Invalid Zip Code</li> </ul> <ul class="alternate" type="square"> <li>Second options is to return 422 status code and Unprocessable Content in the name.</li> </ul> <p>I think the second one is better, but IMO if we do this, when some field is incorrect (example a string field is a number) it should return the same error code. </p> <p>Let me know what do you prefer. </p></comment>
+<comment id="1236017" author="5f155638ce15e80026734127" created="Tue, 21 Mar 2023 14:52:48 +0100"><p>Hi <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a>,</p> <p>As it’s a tech approach I will let <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> answer this question. (contract between Front and Back)</p></comment>
+<comment id="1237896" author="618712d126a5400071483ff5" created="Thu, 23 Mar 2023 15:08:04 +0100"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> ,</p> <p>We suggest to take the 1st approach, which is sending us the status code 400 + in the name attribute, the invalidity reason (zip code or unsupported characters if that the case)</p> <p><em>(Also we both are invalid, depending on how you process bandwidth errors, maybe sending us an array of errors)</em></p> <p>Let us know once the change is applied by giving us the format and we will handle this on the front (also refering to the ticket <a href="https://aircall-product.atlassian.net/browse/PH-8391" title="smart-link" class="external-link" rel="nofollow noreferrer">https://aircall-product.atlassian.net/browse/PH-8391</a> )</p> <p>Thank you</p> <p>cc <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=5f155638ce15e80026734127" class="user-hover" rel="5f155638ce15e80026734127" data-account-id="5f155638ce15e80026734127" accountid="5f155638ce15e80026734127" rel="noreferrer">Fabien Couet</a> <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> </p></comment>
+<comment id="1257476" author="61998592fe9f30006818b980" created="Wed, 3 May 2023 13:14:33 +0200"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> The fix is in staging. So, you can test it and you will be able to see the name inside of the body is InvalidZipCodeError. Let me know if it fits or do you want anything else. If it is all good I will deploy it to prod. I’ll be waiting your answer</p> <p>cc: <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=5f155638ce15e80026734127" class="user-hover" rel="5f155638ce15e80026734127" data-account-id="5f155638ce15e80026734127" accountid="5f155638ce15e80026734127" rel="noreferrer">Fabien Couet</a> <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> </p></comment>
+<comment id="1259111" author="618712d126a5400071483ff5" created="Fri, 5 May 2023 17:49:58 +0200"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> ,</p> <p>Thanks for the info</p> <p>I tested in staging and it seems that we still receive a 500 internal server error in the name attribute, so we will not be able to differentiate from the other reason code received : </p> <div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent"> <pre>{"name":"InternalServerError","message":"Zip ' M5H2L3' is invalid. Only numeric characters are supported with length of 5 digits."}</pre> </div></div> <p>Is it possible to get status code 400 and in the <tt>name</tt> attribute, the invalidity reason (zip code or unsupported characters if that the case) ?</p> <p>Thank you</p> <p>cc <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> </p></comment>
+<comment id="1260754" author="618712d126a5400071483ff5" created="Wed, 10 May 2023 15:18:26 +0200"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> ,</p> <p>Is it possible to update the wording message as the error toast will not be only trailing and leading spaces ?</p> <p>Thank you</p></comment>
+<comment id="1260835" author="618712d126a5400071483ff5" created="Wed, 10 May 2023 16:20:33 +0200"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> ,</p> <p>The "InvalidZipCodeError" attribute you are returning is happening <b>only</b> when trailing / leading spaces are present right ?<br/> I am asking because I wanted to make sure that there is not other errors returned based on this attribute :</p> <ul> <li>if the answer is not, other errors, it's fine</li> <li>otherwise, I propose to have additional attribute on top of the other one, like "reason" to be able to differentiate, by putting for example something like “LeadingTrailingSpaceForbidden”</li> </ul> <p>Thank you </p> <p>cc <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> </p> <p><span class="image-wrap" style=""><img src="/rest/api/3/attachment/content/323779" height="121" width="739" style="border: 0px solid black" /></span></p></comment>
+<comment id="1261068" author="61998592fe9f30006818b980" created="Thu, 11 May 2023 08:08:31 +0200"><p>Hi <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> We are retrieving the error from bandwith and parsing it to return this specific error. This error will appear when the zip code contains blank spaces, or zip code is bigger than characters but the error code returned by bandwidth is always the same. My recommendation is to do a trim in the frontend validation with bandwith specification. </p></comment>
+<comment id="1261075" author="618712d126a5400071483ff5" created="Thu, 11 May 2023 08:32:08 +0200"><p>Thank you <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> for this clarification</p> <p>The reason behind we didn’t trim the input is that requirement were saying that we should not change user input without warning the user (correct me if I am wrong <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> (otherwise, if we do we will “never” receive this kind of error ^^)</p> <p><a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a> : </p> <ul> <li>based on your <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61998592fe9f30006818b980" class="user-hover" rel="61998592fe9f30006818b980" data-account-id="61998592fe9f30006818b980" accountid="61998592fe9f30006818b980" rel="noreferrer">Jordi Sapés</a> ' assumption, the toast message should reflect also that the zip code is too long</li> <li>do you recommend to trim the input ?</li> </ul> <p>Thank you</p></comment>
+<comment id="1262778" author="641637076b29c052ab2d6b5b" created="Mon, 15 May 2023 13:43:01 +0200"><p>Hey guys, <br/> usually when a user introduce white spaces before or after, it’s a mistake in key typing.<br/> Nowadays we are already validation <tt>US</tt> and <tt>Canadian</tt> ZIP length, and for remaining ones we have a max length of 10 digits.<br/> This means we have to possible scenarios for <tt>InvalidZipCodeError</tt>:</p> <ul> <li>Trailing spaces</li> <li>Zip code length</li> </ul> <p>In my opinion the <tt>Please remove leading or trailing spaces from Postal Code field</tt> message doesn’t cover all the scenarios.</p> <p>So I thing we should follow a simple approach, considering that trailing spaces are user mistakes, we can simply trim them <b>onBlur</b>, and when we get <tt>InvalidZipCodeError</tt> it will be because of the zip code <tt>length</tt> , so we can simply give a generic message like <tt>The zip code introduced is not a valid zipcode</tt>.</p></comment>
+<comment id="1262901" author="61a419f0fe9f300068873988" created="Mon, 15 May 2023 15:00:00 +0200"><p>Thank you <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=641637076b29c052ab2d6b5b" class="user-hover" rel="641637076b29c052ab2d6b5b" data-account-id="641637076b29c052ab2d6b5b" accountid="641637076b29c052ab2d6b5b" rel="noreferrer">Filipe Rito</a> and <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> <br/> I propose to change the text of the banner with the following information: <br/> ”<tt>The Postal Code is incorrect; please check the length or remove any leading or trailing spaces."</tt><br/> I update the Acceptance criteria accordingly.<br/> Thank you </p></comment>
+<comment id="1263967" author="5d9c4f8e0265ca0db955af17" created="Tue, 16 May 2023 18:35:16 +0200"><p><a href="https://gitlab.com/filipe.rito" class="external-link" rel="nofollow noreferrer">Filipe Rito</a> mentioned this issue in <a href="https://gitlab.com/aircall/clients/phone/-/merge_requests/1735" class="external-link" rel="nofollow noreferrer">merge request !1735</a> of <a href="https://gitlab.com/aircall/clients/phone" class="external-link" rel="nofollow noreferrer">Aircall / Clients / phone</a> on branch <a href="https://gitlab.com/aircall/clients/phone/-/tree/feat/PH-8398/emergency-address-zip-code-validation" class="external-link" rel="nofollow noreferrer">feat/PH-8398/emergency-address-zip-code-validation</a>:<blockquote><p>feat(emergency-address): add api error code validation for zip code <span class="jira-issue-macro resolved" data-jira-key="PH-8398" > <a href="https://aircall-product.atlassian.net/browse/PH-8398" class="jira-issue-macro-key issue-link" title="Emergency Address error handling Zip Code field" > <img class="icon" src="https://aircall-product.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" /> PH-8398 </a> <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-success jira-macro-single-issue-export-pdf">Done</span> </span> </p></blockquote></p></comment>
+<comment id="1265139" author="5d9c4f8e0265ca0db955af17" created="Thu, 18 May 2023 15:45:43 +0200"><p><a href="https://gitlab.com/filipe.rito" class="external-link" rel="nofollow noreferrer">Filipe Rito</a> mentioned this issue in <a href="https://gitlab.com/aircall/qa/cypress/-/merge_requests/681" class="external-link" rel="nofollow noreferrer">merge request !681</a> of <a href="https://gitlab.com/aircall/qa/cypress" class="external-link" rel="nofollow noreferrer">Aircall / QA / cypress</a> on branch <a href="https://gitlab.com/aircall/qa/cypress/-/tree/feat/PH-8398/emergency-address-zip-code-validation" class="external-link" rel="nofollow noreferrer">feat/PH-8398/emergency-address-zip-code-validation</a>:<blockquote><p>feat(emergency-address): add test to validate zip code on the API <span class="jira-issue-macro resolved" data-jira-key="PH-8398" > <a href="https://aircall-product.atlassian.net/browse/PH-8398" class="jira-issue-macro-key issue-link" title="Emergency Address error handling Zip Code field" > <img class="icon" src="https://aircall-product.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" /> PH-8398 </a> <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-success jira-macro-single-issue-export-pdf">Done</span> </span> </p></blockquote></p></comment>
+<comment id="1269589" author="5b89121c6d3a2a2be1b185c8" created="Fri, 26 May 2023 21:06:33 +0200"><p>This is blocked as the HP automation is not Merged yet </p></comment>
+<comment id="1278814" author="618712d126a5400071483ff5" created="Wed, 14 Jun 2023 15:33:06 +0200"><p>Hello <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=5b89121c6d3a2a2be1b185c8" class="user-hover" rel="5b89121c6d3a2a2be1b185c8" data-account-id="5b89121c6d3a2a2be1b185c8" accountid="5b89121c6d3a2a2be1b185c8" rel="noreferrer">Ruban Christians</a> ,</p> <p>Do you have some update on that topic please ?</p> <p>Thank you</p></comment>
+<comment id="1278906" author="5b89121c6d3a2a2be1b185c8" created="Wed, 14 Jun 2023 16:41:41 +0200"><p>Sorry for the delay <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=618712d126a5400071483ff5" class="user-hover" rel="618712d126a5400071483ff5" data-account-id="618712d126a5400071483ff5" accountid="618712d126a5400071483ff5" rel="noreferrer">Réda Akermi</a> </p> <p>Its done �� </p></comment>
+<comment id="1280671" author="557058:f58131cb-b67d-43c7-b30d-6b58d40bd077" created="Mon, 19 Jun 2023 12:11:11 +0200"><p>Hi <a href="https://aircall-product.atlassian.net/secure/ViewProfile.jspa?accountId=61a419f0fe9f300068873988" class="user-hover" rel="61a419f0fe9f300068873988" data-account-id="61a419f0fe9f300068873988" accountid="61a419f0fe9f300068873988" rel="noreferrer">Karim Rezc gutiérrez</a>, this ticket has just been deployed to production. Well done!</p></comment>
+</comments>
+<issuelinks>
+<issuelinktype id="10000">
+<name>Blocks</name>
+<inwardlinks description="is blocked by">
+<issuelink>
+<issuekey id="306748">MTRA-1152</issuekey>
+</issuelink>
+</inwardlinks>
+</issuelinktype>
+<issuelinktype id="10003">
+<name>Relates</name>
+<outwardlinks description="relates to">
+<issuelink>
+<issuekey id="306748">MTRA-1152</issuekey>
+</issuelink>
+</outwardlinks>
+</issuelinktype>
+<issuelinktype id="10009">
+<name>Test</name>
+<inwardlinks description="is tested by">
+<issuelink>
+<issuekey id="317297">PH-8797</issuekey>
+</issuelink>
+<issuelink>
+<issuekey id="317299">PH-8798</issuekey>
+</issuelink>
+<issuelink>
+<issuekey id="317300">PH-8799</issuekey>
+</issuelink>
+<issuelink>
+<issuekey id="317301">PH-8800</issuekey>
+</issuelink>
+</inwardlinks>
+</issuelinktype>
+</issuelinks>
+<attachments>
+<attachment id="316898" name="Error - Postal Code.png" size="120937" author="76d0bf32-d6c1-48f8-922d-fef3871c8527" created="Wed, 15 Mar 2023 14:32:26 +0100"/>
+<attachment id="323779" name="image-20230510-142616.png" size="16731" author="ug:2978fb70-9bfc-4595-96c3-bfc4a5732526" created="Wed, 10 May 2023 16:26:20 +0200"/>
+</attachments>
+<subtasks> </subtasks>
+<customfields>
+<customfield id="customfield_10024" key="com.atlassian.servicedesk.approvals-plugin:sd-approvals">
+<customfieldname>Approvals</customfieldname>
+<customfieldvalues> </customfieldvalues>
+</customfield>
+<customfield id="customfield_10204" key="com.atlassian.plugins.atlassian-connect-plugin:jql-extensions__attachments-count-field">
+<customfieldname>Attachment count</customfieldname>
+<customfieldvalues>
+<customfieldvalue>2.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10188" key="com.atlassian.jira.plugin.system.customfieldtypes:select">
+<customfieldname>Blast Radius</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="10695">
+<![CDATA[ S ]]>
+</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10706" key="com.atlassian.jira.plugin.system.customfieldtypes:textarea">
+<customfieldname>Change log</customfieldname>
+<customfieldvalues>
+<customfieldvalue>||Date of the change|| || <br/> ||Change|| || <br/> ||Owner|| || <br/> ||Detail|| ||</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10205" key="com.atlassian.plugins.atlassian-connect-plugin:jql-extensions__comments-count-field">
+<customfieldname>Comment count</customfieldname>
+<customfieldvalues>
+<customfieldvalue>19.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10254" key="com.atlassian.jira.plugin.system.customfieldtypes:userpicker">
+<customfieldname>Dev Owner</customfieldname>
+<customfieldvalues>
+<customfieldvalue>e06ba5e4-8e5e-4ad0-99a6-a7eafba0270e</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10000" key="com.atlassian.jira.plugins.jira-development-integration-plugin:devsummarycf">
+<customfieldname>Development</customfieldname>
+<customfieldvalues> </customfieldvalues>
+</customfield>
+<customfield id="customfield_10014" key="com.pyxis.greenhopper.jira:gh-epic-link">
+<customfieldname>Epic Link</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="$xmlutils.escape($text)">Agent's experience core improvements</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10207" key="com.atlassian.plugins.atlassian-connect-plugin:jql-extensions__issue-links-count-field">
+<customfieldname>Issue link count</customfieldname>
+<customfieldvalues>
+<customfieldvalue>6.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10193" key="com.atlassian.jira.plugin.system.customfieldtypes:select">
+<customfieldname>QA Sub-Status</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="10713">
+<![CDATA[ Done ]]>
+</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10019" key="com.pyxis.greenhopper.jira:gh-lexo-rank">
+<customfieldname>Rank</customfieldname>
+<customfieldvalues>
+<customfieldvalue>2|i03gq1:</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10286" key="com.atlassian.jira.plugin.system.customfieldtypes:multiselect">
+<customfieldname>Repository</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="10988">
+<![CDATA[ phone ]]>
+</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10156" key="com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes">
+<customfieldname>Send By Mail</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="10463">
+<![CDATA[ Yes ]]>
+</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10020" key="com.pyxis.greenhopper.jira:gh-sprint">
+<customfieldname>Sprint</customfieldname>
+<customfieldvalues>
+<customfieldvalue id="2114">2023/06/05-PH-Core-W23-W24</customfieldvalue>
+<customfieldvalue id="2070">2023/05/22-PH-Core-W21-W22</customfieldvalue>
+<customfieldvalue id="2043">2023/05/08-PH-Core-W19-W20</customfieldvalue>
+<customfieldvalue id="2143">2023/06/19-PH-Core-W25-W26</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10015" key="com.atlassian.jira.plugin.system.customfieldtypes:datepicker">
+<customfieldname>Start date</customfieldname>
+<customfieldvalues>
+<customfieldvalue>Tue, 16 May 2023 00:00:00 +0000</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10028" key="com.atlassian.jira.plugin.system.customfieldtypes:float">
+<customfieldname>Story Points</customfieldname>
+<customfieldvalues>
+<customfieldvalue>3.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10206" key="com.atlassian.plugins.atlassian-connect-plugin:jql-extensions__subtasks-count-field">
+<customfieldname>Subtask count</customfieldname>
+<customfieldvalues>
+<customfieldvalue>0.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10001" key="com.atlassian.teams:rm-teams-custom-field-team">
+<customfieldname>Team</customfieldname>
+<customfieldvalues>
+<customfieldvalue id="46">Phone Core Team</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10544" key="com.atlassian.jira.plugin.system.customfieldtypes:multiselect">
+<customfieldname>Tools Required</customfieldname>
+<customfieldvalues>
+<customfieldvalue key="13323">
+<![CDATA[ AWS ]]>
+</customfieldvalue>
+<customfieldvalue key="13324">
+<![CDATA[ Metabase ]]>
+</customfieldvalue>
+<customfieldvalue key="13325">
+<![CDATA[ Opsgenie ]]>
+</customfieldvalue>
+<customfieldvalue key="13327">
+<![CDATA[ Datadog ]]>
+</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10208" key="com.atlassian.plugins.atlassian-connect-plugin:jql-extensions__updated-by-count-field">
+<customfieldname>Updated by users count</customfieldname>
+<customfieldvalues>
+<customfieldvalue>13.0</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10022" key="com.atlassian.jira.ext.charting:firstresponsedate">
+<customfieldname>[CHART] Date of First Response</customfieldname>
+<customfieldvalues>
+<customfieldvalue>Wed, 15 Mar 2023 13:31:04 +0000</customfieldvalue>
+</customfieldvalues>
+</customfield>
+<customfield id="customfield_10084" key="com.atlassian.jira.ext.charting:timeinstatus">
+<customfieldname>[CHART] Time in Status</customfieldname>
+<customfieldvalues> </customfieldvalues>
+</customfield>
+<customfield id="customfield_10307" key="com.atlassian.jira.toolkit:reporterdomain">
+<customfieldname>reporterDomain</customfieldname>
+<customfieldvalues>
+<customfieldvalue>aircall.io</customfieldvalue>
+</customfieldvalues>
+</customfield>
+</customfields>
+</item>
+</channel>
+</rss>
