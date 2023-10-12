@@ -17,7 +17,6 @@ function countTokens(str) {
     return tokenCount;
 }
 
-
 // document.getElementById("generateButton").addEventListener("click", function() {
 //     const inputXML = document.getElementById("inputPanel").value;
 
@@ -61,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const dropzone = document.getElementById("dropzone");
     const fileInput = document.getElementById("fileInput");
     const errorText = document.getElementById("errorText");
+    
 
     function handleFile(file) {
         if (file && file.type === "text/xml") {
@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(text, "text/xml");
 
+                const userStoryReviewResults = document.getElementById("answer-1-results");
+                userStoryReviewResults.textContent = "Loading...";
+
                 console.log(text);
                 console.log(xmlDoc);
                 console.log(xmlDoc.getElementsByTagName("title"));
@@ -88,6 +91,46 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log("Description:", description);
                 console.log("Key:", key);
                 console.log("Summary:", summary);
+
+                // const prompt = `Generate test use cases based on the following Jira user story in XML: ${description}`;
+
+                const prompt = `${description}\nEn tant qu’expert métier et QA, tu dois effectuer la relecture fonctionnelle et technique de cet entrant documentaire. 
+                S’il n’y a pas de section “critères d’acceptation” dans le document note une alerte et propose des critères d’acceptations explicites
+                Ensuite, selon toi, quelles informations sont manquantes, incomplètes ou inexactes ? Donne des exemples concrêts.
+                Ensuite, affine ta relecture en la complétant avec les critère de qualité suivants avec beaucoup de détails et des exemples concrêts pour chacun d’entre eux : 
+                Sécurité
+                Compatibilité
+                Performance
+                interopérabilité
+                Fiabilité
+                Maintenabilité
+                Enfin, en tenant compte des remarques que tu as générées, complète la liste avec des informations supplémentaires et nouvelles
+                Rédige en Français`
+                console.log(countTokens(prompt));
+
+                fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer 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`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4",
+                        messages: [{
+                            "role": "system",
+                            "content": prompt
+                        }],
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.getElementById("answer-1-results").textContent = data.choices[0].message.content.trim();
+                })
+                .catch(error => {
+                    alert("An error occurred. Please try again.");
+                    console.error("Error:", error);
+                });
             };
 
             reader.readAsText(file);
