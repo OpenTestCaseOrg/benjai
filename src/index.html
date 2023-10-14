@@ -274,9 +274,11 @@
                   </p>
                 </div>
                 <div
+                  id="drag-drop-section"
                   class="mt-10 flex flex-col items-center justify-center gap-x-6"
                 >
                   <div
+                    id="drag-drop-inner-section"
                     class="bg-white p-6 rounded shadow-lg relative w-full px-6 py-6"
                   >
                     <div
@@ -307,30 +309,364 @@
               </div>
             </div>
 
-            <!-- ANSWER 1-->
-            <div id="answer-1" class="w-full mt-16 min-h-2xl">
-              <div class="w-full bg-gray-800">
-                <div class="mx-auto max-w-6xl p-8 flex items-center">
-                  <div class="bg-indigo-500 p-2 rounded-md">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="white"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
-                      />
-                    </svg>
+
+            <!-- PARSED XML OUTPUT -->
+            <div id="loaded-xml-section" class="w-full mt-16 min-h-2xl" hidden>
+            <div
+                  class="w-full mt-16 min-h-2xl"
+                >
+                  <div class="w-full bg-gray-800">
+                    <div class="mx-auto max-w-6xl p-8 flex items-start">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="white"
+                        class="w-8 h-8 bg-indigo-500 p-1 rounded-md"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
+                        />
+                      </svg>
+                      <div
+                        id="loaded-xml-results"
+                        class="text-white ml-4 text-left"
+                      >
+                        Parsing the XML file...
+                      </div>
+                    </div>
                   </div>
-                  <p id="answer-1-results" class="text-white ml-4">
+                </div>
+              </div>
+
+            <!-- ANSWER 1-->
+            <div id="answer-1" class="w-full min-h-2xl" hidden>
+              <div class="w-full bg-gray-800">
+                <div class="mx-auto max-w-6xl p-8 flex items-start">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="white"
+                    class="w-8 h-8 bg-indigo-500 p-1 rounded-md"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
+                    />
+                  </svg>
+                  <p id="answer-1-results" class="text-white ml-4 text-left">
                     I'm ready!
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <!-- BREAK 1-->
+            <div
+              class="mx-auto max-w-6xl px-6 lg:px-8 text-center"
+              id="break-1"
+              hidden
+            >
+              <div class="h-screen">
+                <p class="mt-24 text-lg leading-8 text-gray-300">
+                  Impressed already? Go a step further and ask BenjAI to
+                  generate test cases from your user story.
+                </p>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                  <a
+                    id="goToSection2"
+                    href="#section-2"
+                    class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                  >
+                    Generate test cases!
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2-->
+            <div class="mx-auto max-w-6xl px-6 lg:px-8 text-center">
+              <div id="section-2" hidden>
+                <div
+                  class="mt-10 flex flex-col items-center justify-center gap-x-6"
+                >
+                  <h3
+                    class="text-2xl font-bold tracking-tight text-white sm:text-6xl pt-16 sm:pt-24 pb-6 sm:pb-12"
+                  >
+                    Test cases generation
+                  </h3>
+                  <nav aria-label="Progress">
+                    <ol role="list" class="flex items-center">
+                      <li class="relative pr-16 sm:pr-32">
+                        <!-- Completed Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-indigo-600"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="relative flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-900"
+                        >
+                          <svg
+                            class="h-5 w-5 text-white"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <span class="sr-only">Step 1</span>
+                        </a>
+                      </li>
+                      <li class="relative pr-16 sm:pr-32">
+                        <!-- Current Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-gray-200"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white"
+                          aria-current="step"
+                        >
+                          <span
+                            class="h-2.5 w-2.5 rounded-full bg-indigo-600"
+                            aria-hidden="true"
+                          ></span>
+                          <span class="sr-only">Step 2</span>
+                        </a>
+                      </li>
+                      <li class="relative">
+                        <!-- Upcoming Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-gray-200"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="group relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"
+                        >
+                          <span
+                            class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"
+                            aria-hidden="true"
+                          ></span>
+                          <span class="sr-only">Step 3</span>
+                        </a>
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+                <div
+                  class="mt-10 flex flex-col items-center justify-center gap-x-6"
+                >
+                  <p class="mt-6 text-lg leading-8 text-gray-300">
+                    BenjAI is already working. Relax, take a huge breath. Here
+                    is where the magic happens!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANSWER 2-->
+            <div id="answer-2" class="w-full mt-16 min-h-2xl" hidden>
+              <div class="w-full bg-gray-800">
+                <div class="mx-auto max-w-6xl p-8 flex items-start">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="white"
+                    class="w-8 h-8 bg-indigo-500 p-1"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
+                    />
+                  </svg>
+                  <p id="answer-2-results" class="text-white ml-4">
+                    I'm ready!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- BREAK 2-->
+            <div
+              class="mx-auto max-w-6xl px-6 lg:px-8 text-center"
+              id="break-2"
+              hidden
+            >
+              <div class="h-screen">
+                <p class="mt-24 text-lg leading-8 text-gray-300">
+                  You think we're done already? Not yet, amigo! Go to the next
+                  step to automate those tests.
+                </p>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                  <a
+                    id="goToSection3"
+                    href="#section-3"
+                    class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                  >
+                    Automate test cases!
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3-->
+            <div class="mx-auto max-w-6xl px-6 lg:px-8 text-center">
+              <div id="section-3" hidden>
+                <div
+                  class="mt-10 flex flex-col items-center justify-center gap-x-6"
+                >
+                  <h3
+                    class="text-2xl font-bold tracking-tight text-white sm:text-6xl pt-16 sm:pt-24 pb-6 sm:pb-12"
+                  >
+                    Test cases automation
+                  </h3>
+                  <nav aria-label="Progress">
+                    <ol role="list" class="flex items-center">
+                      <li class="relative pr-16 sm:pr-32">
+                        <!-- Completed Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-indigo-600"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="relative flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-900"
+                        >
+                          <svg
+                            class="h-5 w-5 text-white"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <span class="sr-only">Step 2</span>
+                        </a>
+                      </li>
+                      <li class="relative pr-16 sm:pr-32">
+                        <!-- Completed Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-indigo-600"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="relative flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-900"
+                        >
+                          <svg
+                            class="h-5 w-5 text-white"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <span class="sr-only">Step 2</span>
+                        </a>
+                      </li>
+                      <li class="relative">
+                        <!-- Current Step -->
+                        <div
+                          class="absolute inset-0 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <div class="h-0.5 w-full bg-gray-200"></div>
+                        </div>
+                        <a
+                          href="#"
+                          class="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white"
+                          aria-current="step"
+                        >
+                          <span
+                            class="h-2.5 w-2.5 rounded-full bg-indigo-600"
+                            aria-hidden="true"
+                          ></span>
+                          <span class="sr-only">Step 2</span>
+                        </a>
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+                <div
+                  class="mt-10 flex flex-col items-center justify-center gap-x-6"
+                >
+                  <p class="mt-6 text-lg leading-8 text-gray-300">
+                    BenjAI is still working. All you have to do is getting ready
+                    to cmd+C/cmd+V!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANSWER 3-->
+            <div id="answer-3" class="w-full mt-16 min-h-2xl" hidden>
+              <div class="w-full bg-gray-800">
+                <div class="mx-auto max-w-6xl p-8 flex items-start">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="white"
+                    class="w-8 h-8 bg-indigo-500 p-1"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
+                    />
+                  </svg>
+                  <p id="answer-3-results" class="text-white ml-4">
+                    I'm ready!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- BREAK 3-->
+            <div
+              class="mx-auto max-w-6xl px-6 lg:px-8 text-center"
+              id="break-2"
+              hidden
+            >
+              <div class="h-screen">
+                <p class="mt-24 text-lg leading-8 text-gray-300">
+                  OK we're done this time! For now...
+                </p>
               </div>
             </div>
           </div>
