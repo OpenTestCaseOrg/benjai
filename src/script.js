@@ -85,7 +85,7 @@ Rédige en ${language} et sois aussi précis que possible dans la rédaction de 
     `;
 }
 
-function buildAutomatedTestsPrompt(issueType, description) {
+function buildAutomatedTestsPrompt() {
   return `En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage Javascript, en utilisant Cypress, pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
 Pour chaque cas de test, rédige un script d'automatisation en langage Cypress qui effectue les actions nécessaires pour exécuter le test de manière automatisée. Assurez-vous que chaque script est clair, bien documenté et suit les meilleures pratiques en matière de codage.
 Après avoir généré les scripts de test automatisés, assure-toi de les compléter avec toutes les informations supplémentaires importantes. Cela peut inclure des commentaires décrivant la logique du test, les données d'entrée requises, les assertions pour vérifier les résultats, etc. Veille à ce que chaque script soit accompagné de documentation précise pour faciliter la compréhension et la maintenance ultérieure.
@@ -93,312 +93,254 @@ Fourni également une liste d'éléments à prendre en compte et à surveiller e
 L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.`;
 }
 
+async function postCompletionsRequest(promptName, messages) {
+  // console.log(`Scoring prompt ${countTokens(prompts)}`);
+  console.log("Sending prompt ", promptName);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer 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`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const content = data.choices[0].message.content;
+    console.log(`${promptName} response`, content);
+
+    return content;
+  } catch (error) {
+    alert(`An error occurred with ${promptName}. Please try again.`);
+    console.error("Error:", error);
+  }
+}
+
+function parseXMLFile(e) {
+  const text = e.target.result;
+
+  // need to remove the first line when it comes from Jira as it's not a valid XML
+  const lines = text.split("\n");
+  lines.shift();
+  const modifiedText = lines.join("\n");
+
+  // parse the XML file and extract the most important tags
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(modifiedText, "text/xml");
+  const title = xmlDoc.getElementsByTagName("title")[1]?.textContent || ""; // strange, there are 2 title tags
+  const description =
+    xmlDoc.getElementsByTagName("description")[1]?.innerHTML || ""; // strange, there are 2 description tags
+  const key = xmlDoc.getElementsByTagName("key")[0]?.textContent || "";
+  const summary = xmlDoc.getElementsByTagName("summary")[0]?.textContent || "";
+  const issueType = xmlDoc.getElementsByTagName("type")[0]?.textContent || "";
+  console.log({ xmlDoc, title, description, summary, issueType });
+
+  return { issueType, description, title, key };
+}
+
+/**
+ * Display info from the parsed XML file.
+ * Then ask OpenAI to score the entry.
+ * And finally ask OpenAI to review the entry.
+ */
+async function handleScoringAndReviewingLogic(
+  issueType,
+  description,
+  title,
+  key,
+  language
+) {
+  // display loaded XML
+  document.getElementById(
+    "loaded-xml-results"
+  ).innerHTML = `You've loaded the ${issueType} ${title} (${key}). <br />${description}`;
+  document.getElementById("drag-drop-section").hidden = true;
+  document.getElementById("drag-drop-inner-section").hidden = true;
+  document.getElementById("loaded-xml-section").hidden = false;
+
+  // display the first answer results section
+  document.getElementById("answer-1-results").textContent =
+    "Reviewing the user story now..";
+  document.getElementById("answer-1").hidden = false;
+
+  // building the scoring prompt and estimating tokens
+  const scoringPrompt = buildScoringPrompt(issueType, description);
+
+  ///////////////////////////// PROMPT 0 - SCORING PROMPT
+  const scoringPromptResponse = await postCompletionsRequest(
+    "0 - Scoring prompt",
+    [
+      {
+        role: "user",
+        content: scoringPrompt,
+      },
+    ]
+  );
+
+  // retrieving the quality score by finding the latest percentage in the response
+  const regex = /(\d+)%/g;
+  let match;
+  let percentages = [];
+  while ((match = regex.exec(scoringPromptResponse)) !== null) {
+    percentages.push(match[1]);
+  }
+  const latestPercentage = percentages[percentages.length - 1];
+  console.log("Scores", { percentages, latestPercentage });
+
+  //////////////////////////////////////// PROMPT 1 - REVIEWING PROMPT
+  const reviewingPrompt = buildReviewingPrompt(
+    issueType,
+    description,
+    language
+  );
+
+  const reviewingPromptResponse = await postCompletionsRequest(
+    "1 - Reviewing prompt",
+    [
+      {
+        role: "user",
+        content: reviewingPrompt,
+      },
+    ]
+  );
+
+  document.getElementById(
+    "answer-1-results"
+  ).innerHTML = `Your ${issueType} score is: ${latestPercentage} <br/><br/>${reviewingPromptResponse
+    .trim()
+    .replace(/\n/g, "<br>")}`;
+  document.getElementById("break-1").hidden = false;
+  document.getElementById("section-2").hidden = false;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  const language = "english";
+
+  // HTML elements
   const dropzone = document.getElementById("dropzone");
   const fileInput = document.getElementById("fileInput");
   const errorText = document.getElementById("errorText");
-  const section1 = document.getElementById("section-1");
-  const answer1 = document.getElementById("answer-1");
-  const break1 = document.getElementById("break-1");
-  const section2 = document.getElementById("section-2");
   const answer2 = document.getElementById("answer-2");
   const break2 = document.getElementById("break-2");
   const section3 = document.getElementById("section-3");
   const answer3 = document.getElementById("answer-3");
-  const break3 = document.getElementById("break-3");
-  const language = "english";
-
-  const dragDropSection = document.getElementById("drag-drop-section");
-  const dragDropInnerSection = document.getElementById(
-    "drag-drop-inner-section"
-  );
-  const loadedXmlSection = document.getElementById("loaded-xml-section");
-  const loadedXmlResults = document.getElementById("loaded-xml-results");
-
-  // section1.hidden = false;
-  // answer1.hidden = false;
-  // break1.hidden = false;
-  // section2.hidden = false;
-  // answer2.hidden = false;
-  // break2.hidden = false;
-
-  // section3.hidden = false;
-  // answer3.hidden = false;
-  // break3.hidden = false;
 
   function handleFile(file) {
     if (file && file.type === "text/xml") {
-      // You can process the file here or send to server
+      console.log("File accepted:", file.name);
+      errorText.textContent = "";
+      errorText.classList.add("hidden");
+
+      const reader = new FileReader();
+      reader.onload = handleFileLoad;
+      reader.readAsText(file);
+    } else {
+      errorText.textContent = "Please drop a valid XML file.";
+      errorText.classList.remove("hidden");
+    }
+  }
+
+  function handleFile(file) {
+    if (file && file.type === "text/xml") {
       console.log("File accepted:", file.name);
       errorText.textContent = "";
       errorText.classList.add("hidden");
 
       const reader = new FileReader();
       reader.onload = function (e) {
-        const text = e.target.result;
+        const { issueType, description, title, key } = parseXMLFile(e);
+        handleScoringAndReviewingLogic(issueType, description, title, key);
 
-        // need to remove the first line when it comes from Jira as it's not a valid XML
-        const lines = text.split("\n");
-        lines.shift();
-        const modifiedText = lines.join("\n");
-
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(modifiedText, "text/xml");
-
-        console.log({ xmlDoc });
-
-        dragDropSection.hidden = true;
-        dragDropInnerSection.hidden = true;
-        loadedXmlSection.hidden = false;
-
-        // Extract the content of the XML and display it instead of the drag & drop zone
-        const title =
-          xmlDoc.getElementsByTagName("title")[1]?.textContent || ""; // strange, there are 2 title tags
-        const description =
-          xmlDoc.getElementsByTagName("description")[1]?.innerHTML || ""; // strange, there are 2 description tags
-        const key = xmlDoc.getElementsByTagName("key")[0]?.textContent || "";
-        const summary =
-          xmlDoc.getElementsByTagName("summary")[0]?.textContent || "";
-        const issueType =
-          xmlDoc.getElementsByTagName("type")[0]?.textContent || "";
-        loadedXmlResults.innerHTML = `You've loaded the ${issueType} ${title} (${key}). <br />${description}`;
-
-        console.log({ title, description, summary, issueType });
-
-        const userStoryReviewResults =
-          document.getElementById("answer-1-results");
-        userStoryReviewResults.textContent = "Reviewing the user story now..";
-        answer1.hidden = false;
-
-        // const prompt = `${description}\nEn tant qu’expert métier et QA, tu dois effectuer la relecture fonctionnelle et technique de cet entrant documentaire.
-        //         S’il n’y a pas de section “critères d’acceptation” dans le document note une alerte et propose des critères d’acceptations explicites
-        //         Ensuite, selon toi, quelles informations sont manquantes, incomplètes ou inexactes ? Donne des exemples concrêts.
-        //         Ensuite, affine ta relecture en la complétant avec les critère de qualité suivants avec beaucoup de détails et des exemples concrêts pour chacun d’entre eux :
-        //         Sécurité
-        //         Compatibilité
-        //         Performance
-        //         interopérabilité
-        //         Fiabilité
-        //         Maintenabilité
-        //         Enfin, en tenant compte des remarques que tu as générées, complète la liste avec des informations supplémentaires et nouvelles
-        //         Rédige en Français`;
-        const scoringPrompt = buildScoringPrompt(issueType, description);
-        console.log(`Scoring prompt ${countTokens(scoringPrompt)}`);
-
-        ///////////////////////////// PROMPT 0
-        console.log("SENDING PROMPT 0");
-        fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer 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`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "gpt-4",
-            messages: [
-              {
-                role: "user",
-                content: scoringPrompt,
-              },
-            ],
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(`Prompt 0 response`, data);
-
-            // retrieving the quality score
-            // Regular expression to match percentages in the text
-            const regex = /(\d+)%/g;
-            let match;
-            let percentages = [];
-            while (
-              (match = regex.exec(data.choices[0].message.content)) !== null
-            ) {
-              percentages.push(match[1]);
-            }
-            const latestPercentage = percentages[percentages.length - 1];
-            console.log(percentages);
-            console.log("Last percentage is", latestPercentage);
-
-            //////////////////////////////////////// PROMPT 1
-            const reviewingPrompt = buildReviewingPrompt(
-              issueType,
-              description,
-              language
-            );
-            console.log(`Reviewing prompt ${countTokens(reviewingPrompt)}`);
-            console.log("SENDING PROMPT 1");
-            fetch("https://api.openai.com/v1/chat/completions", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer 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`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                model: "gpt-4",
-                messages: [
-                  {
-                    role: "user",
-                    content: reviewingPrompt,
-                  },
-                ],
-              }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-                console.log(`Prompt 1 response`, data);
-
-                document.getElementById(
-                  "answer-1-results"
-                ).innerHTML = `Your ${issueType} score is: ${latestPercentage} <br/><br/>${data.choices[0].message.content
-                  .trim()
-                  .replace(/\n/g, "<br>")}`;
-                break1.hidden = false;
-                section2.hidden = false;
-
-                //////////////////////////////////////// PROMPT 2
-                // click on button to section 2
-                document
-                  .getElementById("goToSection2")
-                  .addEventListener("click", function () {
-                    // trigger second prompt
-                    const testCaseGeneratorPrompt =
-                      buildTestCaseGeneratorGerkinPrompt(
-                        issueType,
-                        description,
-                        language
-                      );
-                    console.log(
-                      `Reviewing prompt ${countTokens(testCaseGeneratorPrompt)}`
-                    );
-                    console.log("SENDING PROMPT 2");
-                    console.log(
-                      `Prompt 2 ${countTokens(testCaseGeneratorPrompt)}`
-                    );
-
-                    document.getElementById("answer-2-results").textContent =
-                      "Generating test cases...";
-                    answer2.hidden = false;
-
-                    fetch("https://api.openai.com/v1/chat/completions", {
-                      method: "POST",
-                      headers: {
-                        Authorization: `Bearer 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`,
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        model: "gpt-4",
-                        messages: [
-                          {
-                            role: "user",
-                            content: testCaseGeneratorPrompt,
-                          },
-                        ],
-                      }),
-                    })
-                      .then((response) => response.json())
-                      .then((data) => {
-                        const generatedTestCases =
-                          data.choices[0].message.content.trim();
-                        console.log(`Prompt 2 response`, data);
-                        document.getElementById("answer-2-results").innerHTML =
-                          data.choices[0].message.content
-                            .trim()
-                            .replace(/\n/g, "<br>");
-                        break2.hidden = false;
-                        section3.hidden = false;
-
-                        //////////////////////////////////////// PROMPT 3
-
-                        // click on button to section 3
-                        document
-                          .getElementById("goToSection3")
-                          .addEventListener("click", function () {
-                            const automatedTestsPrompt =
-                              buildAutomatedTestsPrompt(issueType, description);
-                            console.log(
-                              `Prompt 3 ${countTokens(automatedTestsPrompt)}`
-                            );
-
-                            document.getElementById(
-                              "answer-3-results"
-                            ).textContent =
-                              "Writing automated tests with Cypress...";
-                            answer3.hidden = false;
-
-                            fetch(
-                              "https://api.openai.com/v1/chat/completions",
-                              {
-                                method: "POST",
-                                headers: {
-                                  Authorization: `Bearer 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`,
-                                  "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                  model: "gpt-4",
-                                  messages: [
-                                    {
-                                      role: "user",
-                                      content: `Here are the test cases you generated befor. /n${generatedTestCases}.`,
-                                    },
-                                    {
-                                      role: "user",
-                                      content: automatedTestsPrompt,
-                                    },
-                                  ],
-                                }),
-                              }
-                            )
-                              .then((response) => response.json())
-                              .then((data) => {
-                                console.log(data);
-                                document.getElementById(
-                                  "answer-3-results"
-                                ).innerHTML = data.choices[0].message.content
-                                  .trim()
-                                  .replace(/\n/g, "<br>")
-                                  .replace(/```(\w+)/, '<pre><code class="$1">')
-                                  .replace(/```/g, "</code></pre>");
-                                // break2.hidden = false;
-                                // section3.hidden = false;
-
-                                // highlight code
-                                document
-                                  .querySelectorAll("pre code")
-                                  .forEach((block) => {
-                                    hljs.highlightBlock(block);
-                                  });
-                              })
-                              .catch((error) => {
-                                alert("An error occurred. Please try again.");
-                                console.error("Error:", error);
-                              });
-                          });
-                      })
-                      .catch((error) => {
-                        alert("An error occurred. Please try again.");
-                        console.error("Error:", error);
-                      });
-                  });
-              })
-              .catch((error) => {
-                alert("An error occurred. Please try again.");
-                console.error("Error:", error);
-              });
-          })
-          .catch((error) => {
-            alert("An error occurred. Please try again.");
-            console.error("Error:", error);
-          });
+        setUpEventListeners(issueType, description);
       };
-
       reader.readAsText(file);
     } else {
       errorText.textContent = "Please drop a valid XML file.";
       errorText.classList.remove("hidden");
     }
+  }
+
+  function setUpEventListeners(issueType, description) {
+    document
+      .getElementById("goToSection2")
+      .addEventListener("click", function () {
+        goToSection2(issueType, description);
+      });
+  }
+
+  async function goToSection2(issueType, description) {
+    const testCaseGeneratorPrompt = buildTestCaseGeneratorGerkinPrompt(
+      issueType,
+      description,
+      language
+    );
+    document.getElementById("answer-2-results").textContent =
+      "Generating test cases...";
+    answer2.hidden = false;
+
+    const reviewingPromptResponse = await postCompletionsRequest(
+      "2 - Test case generator prompt",
+      [
+        {
+          role: "user",
+          content: testCaseGeneratorPrompt,
+        },
+      ]
+    );
+
+    const generatedTestCases = reviewingPromptResponse.trim();
+    document.getElementById("answer-2-results").innerHTML =
+      generatedTestCases.replace(/\n/g, "<br>");
+    break2.hidden = false;
+    section3.hidden = false;
+
+    document
+      .getElementById("goToSection3")
+      .addEventListener("click", function () {
+        goToSection3(generatedTestCases, issueType, description);
+      });
+  }
+
+  async function goToSection3(generatedTestCases, issueType, description) {
+    const automatedTestsPrompt = buildAutomatedTestsPrompt();
+
+    document.getElementById("answer-3-results").textContent =
+      "Writing automated tests with Cypress...";
+    answer3.hidden = false;
+
+    const automatedTestCasesPromptResponse = await postCompletionsRequest(
+      "3 - Test case generator prompt",
+      [
+        {
+          role: "user",
+          content: `Here are the test cases you generated before. /n${generatedTestCases}.`,
+        },
+        {
+          role: "user",
+          content: automatedTestsPrompt,
+        },
+      ]
+    );
+
+    document.getElementById("answer-3-results").innerHTML =
+      automatedTestCasesPromptResponse
+        .trim()
+        .replace(/\n/g, "<br>")
+        .replace(/```(\w+)/, '<pre><code class="$1">')
+        .replace(/```/g, "</code></pre>");
+
+    document.querySelectorAll("pre code").forEach((block) => {
+      hljs.highlightBlock(block);
+    });
   }
 
   function handleDrop(e) {
