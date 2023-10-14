@@ -1118,8 +1118,12 @@ video {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f7f9fc;
@@ -1187,6 +1191,18 @@ button:hover {
 /* .confluenceTable {}
 .confluenceTh {}
 .confluenceTd {} */
+
+pre {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+code {
+  color: #e8e8e8;
+  /* Base color for the code */
+}
 
 .hover\:border-gray-400:hover {
   --tw-border-opacity: 1;

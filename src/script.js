@@ -86,15 +86,11 @@ Rédige en ${language} et sois aussi précis que possible dans la rédaction de 
 }
 
 function buildAutomatedTestsPrompt(issueType, description) {
-  return `Voici une ${issueType}:
-    ${description}
-    En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage Cypress pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
+  return `En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage Javascript, en utilisant Cypress, pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
 Pour chaque cas de test, rédige un script d'automatisation en langage Cypress qui effectue les actions nécessaires pour exécuter le test de manière automatisée. Assurez-vous que chaque script est clair, bien documenté et suit les meilleures pratiques en matière de codage.
 Après avoir généré les scripts de test automatisés, assure-toi de les compléter avec toutes les informations supplémentaires importantes. Cela peut inclure des commentaires décrivant la logique du test, les données d'entrée requises, les assertions pour vérifier les résultats, etc. Veille à ce que chaque script soit accompagné de documentation précise pour faciliter la compréhension et la maintenance ultérieure.
 Fourni également une liste d'éléments à prendre en compte et à surveiller en ce qui concerne les scripts de test automatisés que tu as proposés. Cela pourrait inclure des considérations de stabilité, de gestion des dépendances, de gestion des données de test, et d'autres aspects pertinents de l'automatisation des tests.
-L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.
-
-    `;
+L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.`;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -140,8 +136,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
       reader.onload = function (e) {
         const text = e.target.result;
+
+        // need to remove the first line when it comes from Jira as it's not a valid XML
+        const lines = text.split("\n");
+        lines.shift();
+        const modifiedText = lines.join("\n");
+
         const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, "text/xml");
+        const xmlDoc = parser.parseFromString(modifiedText, "text/xml");
+
+        console.log({ xmlDoc });
 
         dragDropSection.hidden = true;
         dragDropInnerSection.hidden = true;
@@ -158,6 +162,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const issueType =
           xmlDoc.getElementsByTagName("type")[0]?.textContent || "";
         loadedXmlResults.innerHTML = `You've loaded the ${issueType} ${title} (${key}). <br />${description}`;
+
+        console.log({ title, description, summary, issueType });
 
         const userStoryReviewResults =
           document.getElementById("answer-1-results");
@@ -191,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
             model: "gpt-4",
             messages: [
               {
-                role: "system",
+                role: "user",
                 content: scoringPrompt,
               },
             ],
@@ -233,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 model: "gpt-4",
                 messages: [
                   {
-                    role: "system",
+                    role: "user",
                     content: reviewingPrompt,
                   },
                 ],
@@ -286,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         model: "gpt-4",
                         messages: [
                           {
-                            role: "system",
+                            role: "user",
                             content: testCaseGeneratorPrompt,
                           },
                         ],
@@ -294,9 +300,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                       .then((response) => response.json())
                       .then((data) => {
+                        const generatedTestCases =
+                          data.choices[0].message.content.trim();
                         console.log(`Prompt 2 response`, data);
                         document.getElementById("answer-2-results").innerHTML =
-                          data.choices[0].message.content.trim().replace(/\n/g, "<br>");
+                          data.choices[0].message.content
+                            .trim()
+                            .replace(/\n/g, "<br>");
                         break2.hidden = false;
                         section3.hidden = false;
 
@@ -306,12 +316,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         document
                           .getElementById("goToSection3")
                           .addEventListener("click", function () {
-                            const automatedTestsPrompt = buildAutomatedTestsPrompt(issueType, description);
-                            console.log(`Prompt 3 ${countTokens(automatedTestsPrompt)}`);
+                            const automatedTestsPrompt =
+                              buildAutomatedTestsPrompt(issueType, description);
+                            console.log(
+                              `Prompt 3 ${countTokens(automatedTestsPrompt)}`
+                            );
 
                             document.getElementById(
                               "answer-3-results"
-                            ).textContent = "Writing automated tests with Cypress...";
+                            ).textContent =
+                              "Writing automated tests with Cypress...";
                             answer3.hidden = false;
 
                             fetch(
@@ -326,15 +340,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                   model: "gpt-4",
                                   messages: [
                                     {
-                                        role: "system",
-                                        content: automatedTestsPrompt,
-                                      },
-                                      {
-                                        role: "system",
-                                        content: automatedTestsPrompt,
-                                      },
+                                      role: "user",
+                                      content: `Here are the test cases you generated befor. /n${generatedTestCases}.`,
+                                    },
                                     {
-                                      role: "system",
+                                      role: "user",
                                       content: automatedTestsPrompt,
                                     },
                                   ],
@@ -346,10 +356,20 @@ document.addEventListener("DOMContentLoaded", function () {
                                 console.log(data);
                                 document.getElementById(
                                   "answer-3-results"
-                                ).innerHTML =
-                                  data.choices[0].message.content.trim().replace(/\n/g, "<br>");
+                                ).innerHTML = data.choices[0].message.content
+                                  .trim()
+                                  .replace(/\n/g, "<br>")
+                                  .replace(/```(\w+)/, '<pre><code class="$1">')
+                                  .replace(/```/g, "</code></pre>");
                                 // break2.hidden = false;
                                 // section3.hidden = false;
+
+                                // highlight code
+                                document
+                                  .querySelectorAll("pre code")
+                                  .forEach((block) => {
+                                    hljs.highlightBlock(block);
+                                  });
                               })
                               .catch((error) => {
                                 alert("An error occurred. Please try again.");
