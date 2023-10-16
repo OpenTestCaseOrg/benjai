@@ -7,7 +7,10 @@
     <link href="../dist/output.css" rel="stylesheet" />
 
     <!-- Code highlighting-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
 
     <script src="./script.js" defer></script>
@@ -51,15 +54,91 @@
               </svg>
             </button>
           </div>
-          <!-- <div class="hidden lg:flex lg:gap-x-12">
-              <a href="#" class="text-sm font-semibold leading-6 text-white">Product</a>
-              <a href="#" class="text-sm font-semibold leading-6 text-white">Features</a>
-              <a href="#" class="text-sm font-semibold leading-6 text-white">Marketplace</a>
-              <a href="#" class="text-sm font-semibold leading-6 text-white">Company</a>
+          <div class="hidden lg:flex lg:gap-x-12">
+            <a class="text-sm font-semibold leading-6 text-white"
+              >Try it out!</a
+            >
+            <a class="text-sm font-semibold leading-6 text-gray-500">Pricing</a>
+            <a class="text-sm font-semibold leading-6 text-gray-500"
+              >Join the beta</a
+            >
+          </div>
+          <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            <!-- <a href="#" class="text-sm font-semibold leading-6 text-white">Log in <span aria-hidden="true">&rarr;</span></a> -->
+            <div class="relative inline-block text-left">
+              <div>
+                <button
+                  type="button"
+                  class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  id="languageDropdown"
+                  aria-expanded="true"
+                  aria-haspopup="true"
+                  onclick="handleLanguageSelection(event)"
+                >
+                  🇺🇸 English
+                  <svg
+                    class="-mr-1 h-5 w-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <!--
+                  Dropdown menu, show/hide based on menu state.
+              
+                  Entering: "transition ease-out duration-100"
+                    From: "transform opacity-0 scale-95"
+                    To: "transform opacity-100 scale-100"
+                  Leaving: "transition ease-in duration-75"
+                    From: "transform opacity-100 scale-100"
+                    To: "transform opacity-0 scale-95"
+                -->
+              <div
+                id="languageDropdownContent"
+                class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="menu-button"
+                tabindex="-1"
+                hidden
+              >
+                <div class="py-1" role="none">
+                  <a
+                    href="#"
+                    class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="language-english"
+                    >🇺🇸 English</a
+                  >
+                  <a
+                    href="#"
+                    class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="language-french"
+                    >🇫🇷 French</a
+                  >
+                  <a
+                    href="#"
+                    class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm"
+                    role="menuitem"
+                    tabindex="-1"
+                    id="language-spanish"
+                    >🇪🇸 Spanish</a
+                  >
+                </div>
+              </div>
             </div>
-            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-              <a href="#" class="text-sm font-semibold leading-6 text-white">Log in <span aria-hidden="true">&rarr;</span></a>
-            </div> -->
+          </div>
         </nav>
         <!-- Mobile menu, show/hide based on menu open state. -->
         <div class="lg:hidden" role="dialog" aria-modal="true">
@@ -70,7 +149,7 @@
           >
             <div class="flex items-center justify-between">
               <a href="#" class="-m-1.5 p-1.5">
-                <span class="sr-only">Your Company</span>
+                <span class="sr-only">BenjAI</span>
                 <img
                   class="h-8 w-auto"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
@@ -313,38 +392,35 @@
               </div>
             </div>
 
-
             <!-- PARSED XML OUTPUT -->
             <div id="loaded-xml-section" class="w-full mt-16 min-h-2xl" hidden>
-            <div
-                  class="w-full mt-16 min-h-2xl"
-                >
-                  <div class="w-full bg-gray-800">
-                    <div class="mx-auto max-w-6xl p-8 flex items-start">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="white"
-                        class="w-8 h-8 bg-indigo-500 p-1 rounded-md"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
-                        />
-                      </svg>
-                      <div
-                        id="loaded-xml-results"
-                        class="text-white ml-4 text-left"
-                      >
-                        Parsing the XML file...
-                      </div>
+              <div class="w-full mt-16 min-h-2xl">
+                <div class="w-full bg-gray-800">
+                  <div class="mx-auto max-w-6xl p-8 flex items-start">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="white"
+                      class="w-8 h-8 bg-indigo-500 p-1 rounded-md"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"
+                      />
+                    </svg>
+                    <div
+                      id="loaded-xml-results"
+                      class="text-white ml-4 text-left"
+                    >
+                      Parsing the XML file...
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
             <!-- ANSWER 1-->
             <div id="answer-1" class="w-full min-h-2xl" hidden>

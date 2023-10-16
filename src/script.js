@@ -85,12 +85,13 @@ Rédige en ${language} et sois aussi précis que possible dans la rédaction de 
     `;
 }
 
-function buildAutomatedTestsPrompt() {
+function buildAutomatedTestsPrompt(language) {
   return `En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage Javascript, en utilisant Cypress, pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
 Pour chaque cas de test, rédige un script d'automatisation en langage Cypress qui effectue les actions nécessaires pour exécuter le test de manière automatisée. Assurez-vous que chaque script est clair, bien documenté et suit les meilleures pratiques en matière de codage.
 Après avoir généré les scripts de test automatisés, assure-toi de les compléter avec toutes les informations supplémentaires importantes. Cela peut inclure des commentaires décrivant la logique du test, les données d'entrée requises, les assertions pour vérifier les résultats, etc. Veille à ce que chaque script soit accompagné de documentation précise pour faciliter la compréhension et la maintenance ultérieure.
 Fourni également une liste d'éléments à prendre en compte et à surveiller en ce qui concerne les scripts de test automatisés que tu as proposés. Cela pourrait inclure des considérations de stabilité, de gestion des dépendances, de gestion des données de test, et d'autres aspects pertinents de l'automatisation des tests.
-L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.`;
+L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.
+Rédige en ${language}.`;
 }
 
 async function postCompletionsRequest(promptName, messages) {
@@ -223,9 +224,8 @@ async function handleScoringAndReviewingLogic(
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const language = "english";
-
   // HTML elements
+  const languageDropdown = document.getElementById("languageDropdown");
   const dropzone = document.getElementById("dropzone");
   const fileInput = document.getElementById("fileInput");
   const errorText = document.getElementById("errorText");
@@ -258,7 +258,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const reader = new FileReader();
       reader.onload = function (e) {
         const { issueType, description, title, key } = parseXMLFile(e);
-        handleScoringAndReviewingLogic(issueType, description, title, key);
+        const language = languageDropdown.textContent;
+        console.log('LANGUAGE', language)
+        handleScoringAndReviewingLogic(issueType, description, title, key, language);
 
         setUpEventListeners(issueType, description);
       };
@@ -278,16 +280,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function goToSection2(issueType, description) {
-    const testCaseGeneratorPrompt = buildTestCaseGeneratorGerkinPrompt(
+    const language = languageDropdown.textContent;
+    console.log('LANGUAGE', language)
+    const testCaseGeneratorPrompt = buildTestCaseGeneratorPrompt(
       issueType,
       description,
       language
     );
+    const testCaseGeneratorGerkinPrompt = buildTestCaseGeneratorGerkinPrompt(
+        issueType,
+        description,
+        language
+      );
+    
     document.getElementById("answer-2-results").textContent =
       "Generating test cases...";
     answer2.hidden = false;
 
-    const reviewingPromptResponse = await postCompletionsRequest(
+    // TEST CASE
+    const testCaseGeneratorResponse = await postCompletionsRequest(
       "2 - Test case generator prompt",
       [
         {
@@ -296,8 +307,20 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       ]
     );
+    const generatedTestCases = testCaseGeneratorResponse.trim();
 
-    const generatedTestCases = reviewingPromptResponse.trim();
+    // TEST CASE GERKIN
+    const testCaseGeneratorGerkinResponse = await postCompletionsRequest(
+        "2 - Test case generator prompt",
+        [
+          {
+            role: "user",
+            content: testCaseGeneratorPrompt,
+          },
+        ]
+      );
+      const generatedGerkinTestCases = testCaseGeneratorGerkinResponse.trim();
+
     document.getElementById("answer-2-results").innerHTML =
       generatedTestCases.replace(/\n/g, "<br>");
     break2.hidden = false;
@@ -311,7 +334,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function goToSection3(generatedTestCases, issueType, description) {
-    const automatedTestsPrompt = buildAutomatedTestsPrompt();
+    const language = languageDropdown.textContent;
+    console.log('LANGUAGE', language)
+    const automatedTestsPrompt = buildAutomatedTestsPrompt(language);
 
     document.getElementById("answer-3-results").textContent =
       "Writing automated tests with Cypress...";
@@ -335,7 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
       automatedTestCasesPromptResponse
         .trim()
         .replace(/\n/g, "<br>")
-        .replace(/```(\w+)/, '<pre><code class="$1">')
+        .replace(/```(\w+)/g, '<pre><code class="$1">')
         .replace(/```/g, "</code></pre>");
 
     document.querySelectorAll("pre code").forEach((block) => {
@@ -376,6 +401,60 @@ document.addEventListener("DOMContentLoaded", function () {
     handleFile(file);
   }
 
+  // Handle the dropdown button click
+  function handleLanguageClick(event) {
+    event.stopPropagation();
+
+    const dropdownContent = document.getElementById("languageDropdownContent");
+
+    // Toggle dropdown visibility
+    if (dropdownContent.hasAttribute("hidden")) {
+      dropdownContent.removeAttribute("hidden");
+    } else {
+      dropdownContent.setAttribute("hidden", "");
+    }
+  }
+
+  // Handle selecting a language from the dropdown
+  function handleLanguageSelection(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Update dropdown button text with selected language
+    const languageDropdown = document.getElementById("languageDropdown");
+    const selectedLanguage = event.target.textContent.trim();
+    languageDropdown.innerHTML =
+      selectedLanguage +
+      languageDropdown.innerHTML.substr(
+        languageDropdown.innerHTML.indexOf("<svg")
+      );
+
+    // Hide the dropdown
+    document
+      .getElementById("languageDropdownContent")
+      .setAttribute("hidden", "");
+  }
+
+  // Event listener for each dropdown item
+  document
+    .getElementById("language-english")
+    .addEventListener("click", handleLanguageSelection);
+  document
+    .getElementById("language-french")
+    .addEventListener("click", handleLanguageSelection);
+  document
+    .getElementById("language-spanish")
+    .addEventListener("click", handleLanguageSelection);
+
+  // Clicking outside the dropdown should hide it
+  document.addEventListener("click", (event) => {
+    const dropdownContent = document.getElementById("languageDropdownContent");
+    if (!dropdownContent.hasAttribute("hidden")) {
+      dropdownContent.setAttribute("hidden", "");
+    }
+  });
+
+  languageDropdown.addEventListener("click", handleLanguageClick);
   fileInput.addEventListener("change", handleFileChange);
   dropzone.addEventListener("drop", handleDrop);
   dropzone.addEventListener("dragover", handleDragOver);
