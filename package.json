@@ -1,5 +1,11 @@
 {
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
   "devDependencies": {
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.5.0"
   }
 }
