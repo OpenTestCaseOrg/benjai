@@ -102,8 +102,7 @@ async function postCompletionsRequest(promptName, messages) {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        // Authorization: `Bearer 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`,
-        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        Authorization: `Bearer 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`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
