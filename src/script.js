@@ -217,7 +217,7 @@ async function handleScoringAndReviewingLogic(
 
   // just in case the latest percentage is undefined
   const score = latestPercentage
-    ? `Your ${issueType} score is: ${latestPercentage} <br><br>`
+    ? `<strong>Your ${issueType} score is: ${latestPercentage}/100</strong> <br><br>`
     : "";
   document.getElementById(
     "answer-1-results"

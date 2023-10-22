@@ -1,6 +1,7 @@
 MVP
 [] add an export to Jira XML or CSV button for test cases, grey it out
     https://docs.getxray.app/display/XRAY/Importing+Manual+Tests+using+Test+Case+Importer  
+[] design imported user story
 
 Bonus MVP
 [] add a pricing page - in progress
@@ -11,11 +12,3 @@ Bonus MVP
 Misc 
 [] create a Jira account to be able to test import/export
 [] create a Linear account to better understand their flow
-
-Done today
-[] Rename into opentestcase.com
-[] Add $10 to OpenAI API balance
-[] Show the score as percentage or /100
-[] Implement markdown     
-[] Implemented Gherkin format tests
-[] switch from JS & Cypress to Python
