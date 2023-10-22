@@ -17,6 +17,57 @@ function countTokens(str) {
   return tokenCount;
 }
 
+function extractTestCasesFromMarkdown(markdown) {
+  const testCases = [];
+  const testCaseSections = markdown.split(/\*\*Test case \d+: /).slice(1);
+
+  testCaseSections.forEach((section) => {
+    const [summary, ...rest] = section.split("\n");
+
+    let prerequisite = null;
+    let startIndex = 0;
+    if (rest[0].startsWith("Prerequisite:")) {
+      prerequisite = rest[0].replace("Prerequisite:", "").trim();
+      startIndex = 1;
+    }
+
+    const steps = [];
+    for (let i = startIndex; i < rest.length; i++) {
+      const line = rest[i];
+      if (line.startsWith("|") && !line.startsWith("|---")) {
+        const [, action, result] = line.split("|").map((s) => s.trim());
+        steps.push({ action, result });
+      }
+    }
+
+    testCases.push({ summary, prerequisite, steps });
+  });
+
+  return testCases;
+}
+
+function generateCSV(markdown) {
+  const testCases = extractTestCasesFromMarkdown(markdown);
+  console.log("Markdown", testCases);
+
+  let csvContent =
+    "TCID;Test Summary;Test Priority;Component;Component;Action;Data;Result\n";
+
+  testCases.forEach((testCase, index) => {
+    const tcid = index + 1;
+
+    testCase.steps.forEach((step, index) => {
+      if (index === 1) {
+        csvContent += `${tcid};${testCase.summary};;Component TBD;Component TBD;${step.action};;${step.result}\n`;
+      } else {
+        csvContent += `${tcid};;;;;${step.action};;${step.result}\n`;
+      }
+    });
+  });
+
+  return csvContent;
+}
+
 function buildScoringPrompt(issueType, description) {
   return `Voici une ${issueType}:
     ${description}
@@ -67,9 +118,35 @@ function buildTestCaseGeneratorPrompt(issueType, description, language) {
     ${description}
     En tant qu’expert QA, liste un maximum de cas de test nécessaires pour couvrir à 100% cet ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
     Pour chaque cas de test, tu dois rédiger les prérequis de test nécessaire.
-    Pour chaque cas de test, tu dois rédiger toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.
+    Pour chaque cas de test, tu dois rédiger toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée. 
     Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
+    Concernant le format, il faut que le chaque cas de test soit formaté comme ceci:
+      Test case {numéro}: {titre}{newline}
+      Prerequisite: {prérequis}{newline}
+      Tableau
     Rédige en ${language}
+    Voici un exemple du format que j'attends:
+    \`\`\`
+    **Test case 1: Successful triggering of SMS conversation from calendar view**
+
+    Prerequisite: User has an SMS capable line
+    
+    | Action | Expected Result |
+    |----------|------------------|
+    |User ends a call|Call is successfully ended|
+    |User clicks on the SMS button from the call-ended view|SMS button is responsive|
+    |An SMS conversation is initiated|SMS conversation is successfully initiated||
+        
+    **Test case 2: Unsuccessful triggering of SMS conversation from calendar view with non-SMS capable line**
+    
+    Prerequisite: User does not have an SMS capable line
+    
+    | Action | Expected Result |
+    |----------|------------------|
+    |User ends a call|Call is successfully ended|
+    |User tries to click on the SMS button from the call-ended view|SMS button is either blurred or display a message indicating that the line is not capable of sending SMS|
+    |User tries to initiate an SMS conversation|No SMS conversation is initiated|
+    \`\`\`
     `;
 }
 
@@ -286,32 +363,24 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .getElementById("goToSection2")
       .addEventListener("click", function () {
-        goToSection2(issueType, description, {mode: "normal"});
+        goToSection2(issueType, description, { mode: "normal" });
       });
-      document
+    document
       .getElementById("goToSection2Gherkin")
       .addEventListener("click", function () {
-        goToSection2(issueType, description, {mode: "gherkin"});
+        goToSection2(issueType, description, { mode: "gherkin" });
       });
   }
-
-
-  
 
   async function goToSection2(issueType, description, config) {
     const mode = config.mode;
     const language = languageDropdown.textContent;
     console.log("LANGUAGE", language);
 
-    const testCaseGeneratorPrompt = mode == "gherkin" ? buildTestCaseGeneratorGerkinPrompt(
-      issueType,
-      description,
-      language
-    ) : buildTestCaseGeneratorPrompt(
-      issueType,
-      description,
-      language
-    );
+    const testCaseGeneratorPrompt =
+      mode == "gherkin"
+        ? buildTestCaseGeneratorGerkinPrompt(issueType, description, language)
+        : buildTestCaseGeneratorPrompt(issueType, description, language);
 
     document.getElementById("answer-2-results").textContent =
       "Generating test cases...";
@@ -327,35 +396,62 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       ]
     );
-    const generatedTestCases = testCaseGeneratorResponse.trim();
 
-      // format the markdown and display it
+    const generatedTestCases = testCaseGeneratorResponse
+      .trim()
+      .replace("<br>", "");
+
+    try {
+      // Then you can download the CSV content, using Blob for example:
+      const csv = generateCSV(generatedTestCases);
+      console.log("Generated CSV", csv);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.getElementById("download-csv");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "testCases.csv");
+      document.getElementById("download-csv-section").hidden = false;
+    } catch (e) {
+      console.warn("Error while generating the CSV", e);
+    }
+
+    // format the markdown and display it
     const md = window.markdownit();
     const result = md.render(generatedTestCases);
-    document.getElementById('answer-2-results').innerHTML = result;
+    document.getElementById("answer-2-results").innerHTML = result;
     break2.hidden = false;
     section3.hidden = false;
 
     document
       .getElementById("goToSection3")
       .addEventListener("click", function () {
-        goToSection3(generatedTestCases, issueType, description, {library: "cypress"});
+        goToSection3(generatedTestCases, issueType, description, {
+          library: "cypress",
+        });
       });
-      document
+    document
       .getElementById("goToSection3Python")
       .addEventListener("click", function () {
-        goToSection3(generatedTestCases, issueType, description, {library: "pytest"});
+        goToSection3(generatedTestCases, issueType, description, {
+          library: "pytest",
+        });
       });
   }
 
-  async function goToSection3(generatedTestCases, issueType, description, config) {
+  async function goToSection3(
+    generatedTestCases,
+    issueType,
+    description,
+    config
+  ) {
     const library = config.library;
     const language = languageDropdown.textContent;
-    console.log("LANGUAGE", {language,library});
+    console.log("LANGUAGE", { language, library });
     const automatedTestsPrompt = buildAutomatedTestsPrompt(language, library);
 
-    document.getElementById("answer-3-results").textContent =
-      `Writing automated tests with ${library}...`;
+    document.getElementById(
+      "answer-3-results"
+    ).textContent = `Writing automated tests with ${library}...`;
     answer3.hidden = false;
 
     const automatedTestCasesPromptResponse = await postCompletionsRequest(
