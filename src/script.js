@@ -85,9 +85,10 @@ Rédige en ${language} et sois aussi précis que possible dans la rédaction de 
     `;
 }
 
-function buildAutomatedTestsPrompt(language) {
-  return `En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage Javascript, en utilisant Cypress, pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
-Pour chaque cas de test, rédige un script d'automatisation en langage Cypress qui effectue les actions nécessaires pour exécuter le test de manière automatisée. Assurez-vous que chaque script est clair, bien documenté et suit les meilleures pratiques en matière de codage.
+function buildAutomatedTestsPrompt(language, library) {
+  const progLanguage = library == "cypress" ? "javascript" : "python";
+  return `En tant qu'expert en assurance qualité (QA) spécialisé dans l'automatisation, rédige des scripts d'automatisation en langage ${progLanguage}, en utilisant ${library}, pour chacun des cas de test précédemment définis. Chaque cas de test doit être couvert par un script de test automatisé. Voici les directives spécifiques :
+Pour chaque cas de test, rédige un script d'automatisation en langage ${progLanguage}, en utilisant ${library}, qui effectue les actions nécessaires pour exécuter le test de manière automatisée. Assurez-vous que chaque script est clair, bien documenté et suit les meilleures pratiques en matière de codage.
 Après avoir généré les scripts de test automatisés, assure-toi de les compléter avec toutes les informations supplémentaires importantes. Cela peut inclure des commentaires décrivant la logique du test, les données d'entrée requises, les assertions pour vérifier les résultats, etc. Veille à ce que chaque script soit accompagné de documentation précise pour faciliter la compréhension et la maintenance ultérieure.
 Fourni également une liste d'éléments à prendre en compte et à surveiller en ce qui concerne les scripts de test automatisés que tu as proposés. Cela pourrait inclure des considérations de stabilité, de gestion des dépendances, de gestion des données de test, et d'autres aspects pertinents de l'automatisation des tests.
 L'objectif est de créer des scripts d'automatisation robustes et complets qui permettent d'exécuter tous les cas de test de manière automatisée, tout en assurant la qualité et la fiabilité des tests automatisés. Soyez précis dans la rédaction de vos scripts et de votre documentation, et veillez à ce que les scripts soient maintenables à long terme.
@@ -338,17 +339,23 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .getElementById("goToSection3")
       .addEventListener("click", function () {
-        goToSection3(generatedTestCases, issueType, description);
+        goToSection3(generatedTestCases, issueType, description, {library: "cypress"});
+      });
+      document
+      .getElementById("goToSection3Python")
+      .addEventListener("click", function () {
+        goToSection3(generatedTestCases, issueType, description, {library: "pytest"});
       });
   }
 
-  async function goToSection3(generatedTestCases, issueType, description) {
+  async function goToSection3(generatedTestCases, issueType, description, config) {
+    const library = config.library;
     const language = languageDropdown.textContent;
-    console.log("LANGUAGE", language);
-    const automatedTestsPrompt = buildAutomatedTestsPrompt(language);
+    console.log("LANGUAGE", {language,library});
+    const automatedTestsPrompt = buildAutomatedTestsPrompt(language, library);
 
     document.getElementById("answer-3-results").textContent =
-      "Writing automated tests with Cypress...";
+      `Writing automated tests with ${library}...`;
     answer3.hidden = false;
 
     const automatedTestCasesPromptResponse = await postCompletionsRequest(
