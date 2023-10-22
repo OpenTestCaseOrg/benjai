@@ -285,19 +285,28 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .getElementById("goToSection2")
       .addEventListener("click", function () {
-        goToSection2(issueType, description);
+        goToSection2(issueType, description, {mode: "normal"});
+      });
+      document
+      .getElementById("goToSection2Gherkin")
+      .addEventListener("click", function () {
+        goToSection2(issueType, description, {mode: "gherkin"});
       });
   }
 
-  async function goToSection2(issueType, description) {
+
+  
+
+  async function goToSection2(issueType, description, config) {
+    const mode = config.mode;
     const language = languageDropdown.textContent;
     console.log("LANGUAGE", language);
-    const testCaseGeneratorPrompt = buildTestCaseGeneratorPrompt(
+
+    const testCaseGeneratorPrompt = mode == "gherkin" ? buildTestCaseGeneratorGerkinPrompt(
       issueType,
       description,
       language
-    );
-    const testCaseGeneratorGerkinPrompt = buildTestCaseGeneratorGerkinPrompt(
+    ) : buildTestCaseGeneratorPrompt(
       issueType,
       description,
       language
@@ -319,26 +328,10 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const generatedTestCases = testCaseGeneratorResponse.trim();
 
-    // TEST CASE GERKIN
-    const testCaseGeneratorGerkinResponse = await postCompletionsRequest(
-      "2 - Test case generator prompt",
-      [
-        {
-          role: "user",
-          content: testCaseGeneratorPrompt,
-        },
-      ]
-    );
-    const generatedGerkinTestCases = testCaseGeneratorGerkinResponse.trim();
-
-
+      // format the markdown and display it
     const md = window.markdownit();
     const result = md.render(generatedTestCases);
-    
     document.getElementById('answer-2-results').innerHTML = result;
-
-    // document.getElementById("answer-2-results").innerHTML =
-    //   generatedTestCases.replace(/\n/g, "<br>");
     break2.hidden = false;
     section3.hidden = false;
 
