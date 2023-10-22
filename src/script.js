@@ -65,11 +65,11 @@ Rédige en ${language}
 function buildTestCaseGeneratorPrompt(issueType, description, language) {
   return `Voici une ${issueType}:
     ${description}
-    En tant qu’expert QA, liste un maximum de cas de test nécessaires pour couvrir à 100% cette ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
-Pour chaque cas de test, tu dois rédiger les prérequis de test nécessaire.
-Pour chaque cas de test, tu dois rédiger toutes les étapes de test avec le maximum de détails sous la forme d’un tableau avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.
-Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
-Rédige en ${language}
+    En tant qu’expert QA, liste un maximum de cas de test nécessaires pour couvrir à 100% cet ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
+    Pour chaque cas de test, tu dois rédiger les prérequis de test nécessaire.
+    Pour chaque cas de test, tu dois rédiger toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.
+    Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
+    Rédige en ${language}
     `;
 }
 
@@ -215,7 +215,9 @@ async function handleScoringAndReviewingLogic(
   );
 
   // just in case the latest percentage is undefined
-  const score = latestPercentage ? `Your ${issueType} score is: ${latestPercentage} <br><br>` : "";
+  const score = latestPercentage
+    ? `Your ${issueType} score is: ${latestPercentage} <br><br>`
+    : "";
   document.getElementById(
     "answer-1-results"
   ).innerHTML = `${score}${reviewingPromptResponse
@@ -261,8 +263,14 @@ document.addEventListener("DOMContentLoaded", function () {
       reader.onload = function (e) {
         const { issueType, description, title, key } = parseXMLFile(e);
         const language = languageDropdown.textContent;
-        console.log('LANGUAGE', language)
-        handleScoringAndReviewingLogic(issueType, description, title, key, language);
+        console.log("LANGUAGE", language);
+        handleScoringAndReviewingLogic(
+          issueType,
+          description,
+          title,
+          key,
+          language
+        );
 
         setUpEventListeners(issueType, description);
       };
@@ -283,18 +291,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function goToSection2(issueType, description) {
     const language = languageDropdown.textContent;
-    console.log('LANGUAGE', language)
+    console.log("LANGUAGE", language);
     const testCaseGeneratorPrompt = buildTestCaseGeneratorPrompt(
       issueType,
       description,
       language
     );
     const testCaseGeneratorGerkinPrompt = buildTestCaseGeneratorGerkinPrompt(
-        issueType,
-        description,
-        language
-      );
-    
+      issueType,
+      description,
+      language
+    );
+
     document.getElementById("answer-2-results").textContent =
       "Generating test cases...";
     answer2.hidden = false;
@@ -313,18 +321,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // TEST CASE GERKIN
     const testCaseGeneratorGerkinResponse = await postCompletionsRequest(
-        "2 - Test case generator prompt",
-        [
-          {
-            role: "user",
-            content: testCaseGeneratorPrompt,
-          },
-        ]
-      );
-      const generatedGerkinTestCases = testCaseGeneratorGerkinResponse.trim();
+      "2 - Test case generator prompt",
+      [
+        {
+          role: "user",
+          content: testCaseGeneratorPrompt,
+        },
+      ]
+    );
+    const generatedGerkinTestCases = testCaseGeneratorGerkinResponse.trim();
 
-    document.getElementById("answer-2-results").innerHTML =
-      generatedTestCases.replace(/\n/g, "<br>");
+
+    const md = window.markdownit();
+    const result = md.render(generatedTestCases);
+    
+    document.getElementById('answer-2-results').innerHTML = result;
+
+    // document.getElementById("answer-2-results").innerHTML =
+    //   generatedTestCases.replace(/\n/g, "<br>");
     break2.hidden = false;
     section3.hidden = false;
 
@@ -337,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function goToSection3(generatedTestCases, issueType, description) {
     const language = languageDropdown.textContent;
-    console.log('LANGUAGE', language)
+    console.log("LANGUAGE", language);
     const automatedTestsPrompt = buildAutomatedTestsPrompt(language);
 
     document.getElementById("answer-3-results").textContent =

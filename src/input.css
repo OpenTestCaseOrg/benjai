@@ -84,3 +84,35 @@ pre {
 code {
   color: #e8e8e8; /* Base color for the code */
 }
+
+#answer-2-results table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 3em;
+}
+
+#answer-2-results th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#answer-2-results td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#answer-2-results th {
+  background-color: rgb(209 213 219);
+  color: rgb(31 41 55);
+  text-align: left;
+}
+
+#answer-2-results p:has(strong) {
+  margin-top: 1em;
+}
+
+#answer-2-results h2,h3 {
+  color: #444;
+  margin-top: 20px;
+}
