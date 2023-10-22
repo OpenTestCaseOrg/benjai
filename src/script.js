@@ -170,7 +170,7 @@ async function handleScoringAndReviewingLogic(
 
   // display the first answer results section
   document.getElementById("answer-1-results").textContent =
-    "Reviewing the user story now..";
+    "Reviewing the user story now...";
   document.getElementById("answer-1").hidden = false;
 
   // building the scoring prompt and estimating tokens
@@ -214,11 +214,11 @@ async function handleScoringAndReviewingLogic(
     ]
   );
 
-  // just in case the latest percentage is undefined, we don't display it
-  const scoreResponse = latestPercentage ? `Your ${issueType} score is: ${latestPercentage}/100 <br/><br/` : '';
+  // just in case the latest percentage is undefined
+  const score = latestPercentage ? `Your ${issueType} score is: ${latestPercentage} <br><br>` : "";
   document.getElementById(
     "answer-1-results"
-  ).innerHTML = `${scoreResponse}${reviewingPromptResponse
+  ).innerHTML = `${score}${reviewingPromptResponse
     .trim()
     .replace(/\n/g, "<br>")}`;
   document.getElementById("break-1").hidden = false;

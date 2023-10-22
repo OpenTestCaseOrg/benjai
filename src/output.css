@@ -1013,6 +1013,10 @@ select {
   max-width: 28rem;
 }
 
+.max-w-5xl {
+  max-width: 64rem;
+}
+
 .flex-none {
   flex: none;
 }
