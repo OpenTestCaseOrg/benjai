@@ -214,9 +214,11 @@ async function handleScoringAndReviewingLogic(
     ]
   );
 
+  // just in case the latest percentage is undefined, we don't display it
+  const scoreResponse = latestPercentage ? `Your ${issueType} score is: ${latestPercentage}/100 <br/><br/` : '';
   document.getElementById(
     "answer-1-results"
-  ).innerHTML = `Your ${issueType} score is: ${latestPercentage} <br/><br/>${reviewingPromptResponse
+  ).innerHTML = `${scoreResponse}${reviewingPromptResponse
     .trim()
     .replace(/\n/g, "<br>")}`;
   document.getElementById("break-1").hidden = false;
