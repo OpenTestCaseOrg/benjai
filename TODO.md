@@ -4,7 +4,6 @@ MVP
 [] design imported user story
 
 Bonus MVP
-[] add a pricing page - in progress
 [] implement a "Join the beta" feature - a simple pre filled email to our personal email addresses
 [] add a page with the history of requests, hashmap with ticket ID
 [] implement regenerate for each prompt
@@ -12,3 +11,6 @@ Bonus MVP
 Misc 
 [] create a Jira account to be able to test import/export
 [] create a Linear account to better understand their flow
+
+DONE
+[] add a pricing pricng

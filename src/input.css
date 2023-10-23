@@ -116,3 +116,31 @@ code {
   color: #444;
   margin-top: 20px;
 }
+
+/* loaded-xml-section */
+#loaded-xml-section h3 {
+  margin-top: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 3em;
+}
+
+th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: rgb(209 213 219);
+  color: rgb(31 41 55);
+  text-align: left;
+}
