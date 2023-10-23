@@ -122,24 +122,24 @@ code {
   margin-top: 0;
 }
 
-table {
+#loaded-xml-section table {
   border-collapse: collapse;
   width: 100%;
   margin-top: 1em;
   margin-bottom: 3em;
 }
 
-th {
+#loaded-xml-section th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-td {
+#loaded-xml-section td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-th {
+#loaded-xml-section th {
   background-color: rgb(209 213 219);
   color: rgb(31 41 55);
   text-align: left;
