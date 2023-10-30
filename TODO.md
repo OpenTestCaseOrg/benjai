@@ -1,8 +1,7 @@
 MVP
-[] Give Aurélien the needs regarding prompt
 [] Think about GPT performances + UX (stream vs async) 
-[] Better parse XML, be careful with the first line
-[] design imported user story
+[] design imported user story (all of them)
+[] design the extension
 
 Bonus MVP
 [] implement a "Join the beta" feature - a simple pre filled email to our personal email addresses
