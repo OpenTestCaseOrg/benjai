@@ -207,9 +207,12 @@ async function postCompletionsRequest(promptName, messages) {
 function parseXMLFile(e) {
   const text = e.target.result;
 
-  // need to remove the first line when it comes from Jira as it's not a valid XML
+  // sometimes, need to remove the first line when it comes from Jira as it's not a valid XML
   const lines = text.split("\n");
-  lines.shift();
+  const needToRemoveFirstLine = lines[0].includes("This XML file does not");
+  if (needToRemoveFirstLine) {
+    lines.shift();
+  }
   const modifiedText = lines.join("\n");
 
   // parse the XML file and extract the most important tags
