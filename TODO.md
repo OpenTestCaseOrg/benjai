@@ -1,6 +1,7 @@
 MVP
-[] add an export to Jira XML or CSV button for test cases, grey it out
-    https://docs.getxray.app/display/XRAY/Importing+Manual+Tests+using+Test+Case+Importer  
+[] Give Aurélien the needs regarding prompt
+[] Think about GPT performances + UX (stream vs async) 
+[] Better parse XML, be careful with the first line
 [] design imported user story
 
 Bonus MVP
@@ -11,6 +12,3 @@ Bonus MVP
 Misc 
 [] create a Jira account to be able to test import/export
 [] create a Linear account to better understand their flow
-
-DONE
-[] add a pricing pricng
