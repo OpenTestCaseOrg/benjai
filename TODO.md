@@ -1,7 +1,5 @@
 MVP
 [] Think about GPT performances + UX (stream vs async) 
-[] design imported user story (all of them)
-[] design the extension
 
 Bonus MVP
 [] implement a "Join the beta" feature - a simple pre filled email to our personal email addresses
@@ -11,3 +9,5 @@ Bonus MVP
 Misc 
 [] create a Jira account to be able to test import/export
 [] create a Linear account to better understand their flow
+
+
