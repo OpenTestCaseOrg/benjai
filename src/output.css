@@ -1725,6 +1725,22 @@ code {
   margin-top: 20px;
 }
 
+#loaded-xml-section #loaded-description{
+  font-weight: bold;
+}
+
+#loaded-xml-section p {
+  margin-top: 4px;
+}
+
+#loaded-xml-section ol {
+  list-style-type: upper-roman;
+}
+
+#loaded-xml-section li {
+  list-style: inside;
+}
+
 /* loaded-xml-section */
 
 #loaded-xml-section h3 {

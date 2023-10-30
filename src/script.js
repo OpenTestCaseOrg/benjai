@@ -416,7 +416,7 @@ async function handleScoringAndReviewingLogic(
   // display loaded XML
   document.getElementById(
     "loaded-xml-results"
-  ).innerHTML = `You've loaded the ${issueType} ${title} (${key}). <br />${cleanedDescription}`;
+  ).innerHTML = `You've loaded the <span id="loaded-description">${issueType} ${title} (${key}).</span> <br />${cleanedDescription}`;
   document.getElementById("drag-drop-section").hidden = true;
   document.getElementById("drag-drop-inner-section").hidden = true;
   document.getElementById("loaded-xml-section").hidden = false;
