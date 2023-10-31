@@ -338,6 +338,11 @@ Rédige en ${language}.`;
   `;
 }
 
+// Retrieve stored data from local storage (if any) when the script loads
+let totalCost = parseFloat(localStorage.getItem('totalCost') || "0");
+let promptCount = parseInt(localStorage.getItem('promptCount') || "0");
+let averageCostPerPrompt = parseInt(localStorage.getItem('averageCostPerPrompt') || "0");
+
 async function postCompletionsRequest(promptName, messages) {
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -358,6 +363,33 @@ async function postCompletionsRequest(promptName, messages) {
 
     const data = await response.json();
     const content = data.choices[0].message.content;
+    const completionTokens = data.usage.completion_tokens;
+    const promptTokens = data.usage.prompt_tokens;
+
+    // Calculate cost
+    const cost = promptTokens * 0.06 / 1000 + completionTokens * 0.12 / 1000;
+    totalCost += cost;
+    promptCount++;
+    const averageCost = totalCost / promptCount;
+
+    const promptData = {
+      prompt: promptName,
+      promptTokens: promptTokens,
+      completionTokens: completionTokens,
+      estimatedCost: `${cost.toFixed(2)}c`
+    };
+
+    // Store the promptData in local storage
+    const existingData = JSON.parse(localStorage.getItem('promptData') || "[]");
+    existingData.push(promptData);
+    localStorage.setItem('promptData', JSON.stringify(existingData));
+
+    // Store updated totalCost and promptCount in local storage
+    localStorage.setItem('totalCost', totalCost.toString());
+    localStorage.setItem('promptCount', promptCount.toString());
+    
+    // Store averageCost in local storage
+    localStorage.setItem('averageCost', averageCost.toFixed(2));
 
     return content;
   } catch (error) {
