@@ -434,6 +434,9 @@ async function handleScoringAndReviewingLogic(
       .replaceAll("<font", "<span")
       .replaceAll("</font>", "</span>");
   }
+  const promptInput = `ID: ${key}
+  Title: ${title}
+  Description: ${cleanedDescription}`
 
   // display loaded XML
   document.getElementById(
@@ -449,7 +452,7 @@ async function handleScoringAndReviewingLogic(
   document.getElementById("answer-1").hidden = false;
 
   // building the scoring prompt and estimating tokens
-  const scoringPrompt = buildScoringPrompt(issueType, description);
+  const scoringPrompt = buildScoringPrompt(issueType, promptInput);
 
   ///////////////////////////// PROMPT 0 - SCORING PROMPT
   const scoringPromptResponse = await postCompletionsRequest(
@@ -475,7 +478,7 @@ async function handleScoringAndReviewingLogic(
   //////////////////////////////////////// PROMPT 1 - REVIEWING PROMPT
   const reviewingPrompt = buildReviewingPrompt(
     issueType,
-    description,
+    promptInput,
     language
   );
 

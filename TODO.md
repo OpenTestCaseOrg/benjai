@@ -1,4 +1,6 @@
 MVP
+[] Add title + ID to user story
+[] Fix CSV file format + link (hidden)
 [] Think about GPT performances + UX (stream vs async) 
 
 Bonus MVP
