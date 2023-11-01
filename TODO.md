@@ -9,5 +9,3 @@ Bonus MVP
 Misc 
 [] create a Jira account to be able to test import/export
 [] create a Linear account to better understand their flow
-
-

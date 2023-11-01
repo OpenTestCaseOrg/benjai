@@ -241,36 +241,23 @@ function buildReviewingPrompt(issueType, description, language) {
 function buildTestCaseGeneratorPrompt(issueType, description, language) {
   const oldPrompt = `Voici une ${issueType}:
     ${description}
-    En tant qu’expert QA, liste un maximum de cas de test nécessaires pour couvrir à 100% cet ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
-    Pour chaque cas de test, tu dois rédiger les prérequis de test nécessaire.
-    Pour chaque cas de test, tu dois rédiger toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée. 
-    Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
-    Concernant le format, il faut que le chaque cas de test soit formaté comme ceci:
-      Test case {numéro}: {titre}{newline}
-      Prerequisite: {prérequis}{newline}
-      Tableau
-    Rédige en ${language}
-    Voici un exemple du format que j'attends:
-    \`\`\`
-    **Test case 1: Successful triggering of SMS conversation from calendar view**
+    Rôle = Expert QA
 
-    Prerequisite: User has an SMS capable line
-    
-    | Action | Expected Result |
-    |----------|------------------|
-    |User ends a call|Call is successfully ended|
-    |User clicks on the SMS button from the call-ended view|SMS button is responsive|
-    |An SMS conversation is initiated|SMS conversation is successfully initiated||
-        
-    **Test case 2: Unsuccessful triggering of SMS conversation from calendar view with non-SMS capable line**
-    
-    Prerequisite: User does not have an SMS capable line
-    
-    | Action | Expected Result |
-    |----------|------------------|
-    |User ends a call|Call is successfully ended|
-    |User tries to click on the SMS button from the call-ended view|SMS button is either blurred or display a message indicating that the line is not capable of sending SMS|
-    |User tries to initiate an SMS conversation|No SMS conversation is initiated|
+    Prompt = Génère un maximum de cas de test nécessaires pour couvrir à 100% cette ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
+    Pour chaque cas de test, rédige les prérequis de test nécessaire.
+    Pour chaque cas de test, rédige toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. 
+    Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.        
+    Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
+
+    Formate l’output comme dans l'exemple suivant :
+    **Titre du cas de test**
+    _Prérequis de test :_
+    1.Prérequis 1
+    2.Prérequis 2
+
+    |#|Actions|Résultats attendus|
+
+    Langue = ${language}
     \`\`\`
     `;
 
@@ -339,9 +326,11 @@ Rédige en ${language}.`;
 }
 
 // Retrieve stored data from local storage (if any) when the script loads
-let totalCost = parseFloat(localStorage.getItem('totalCost') || "0");
-let promptCount = parseInt(localStorage.getItem('promptCount') || "0");
-let averageCostPerPrompt = parseInt(localStorage.getItem('averageCostPerPrompt') || "0");
+let totalCost = parseFloat(localStorage.getItem("totalCost") || "0");
+let promptCount = parseInt(localStorage.getItem("promptCount") || "0");
+let averageCostPerPrompt = parseInt(
+  localStorage.getItem("averageCostPerPrompt") || "0"
+);
 
 async function postCompletionsRequest(promptName, messages) {
   try {
@@ -367,7 +356,8 @@ async function postCompletionsRequest(promptName, messages) {
     const promptTokens = data.usage.prompt_tokens;
 
     // Calculate cost
-    const cost = promptTokens * 0.06 / 1000 + completionTokens * 0.12 / 1000;
+    const cost =
+      (promptTokens * 0.06) / 1000 + (completionTokens * 0.12) / 1000;
     totalCost += cost;
     promptCount++;
     const averageCost = totalCost / promptCount;
@@ -376,20 +366,20 @@ async function postCompletionsRequest(promptName, messages) {
       prompt: promptName,
       promptTokens: promptTokens,
       completionTokens: completionTokens,
-      estimatedCost: `${cost.toFixed(2)}c`
+      estimatedCost: `${cost.toFixed(2)}c`,
     };
 
     // Store the promptData in local storage
-    const existingData = JSON.parse(localStorage.getItem('promptData') || "[]");
+    const existingData = JSON.parse(localStorage.getItem("promptData") || "[]");
     existingData.push(promptData);
-    localStorage.setItem('promptData', JSON.stringify(existingData));
+    localStorage.setItem("promptData", JSON.stringify(existingData));
 
     // Store updated totalCost and promptCount in local storage
-    localStorage.setItem('totalCost', totalCost.toString());
-    localStorage.setItem('promptCount', promptCount.toString());
-    
+    localStorage.setItem("totalCost", totalCost.toString());
+    localStorage.setItem("promptCount", promptCount.toString());
+
     // Store averageCost in local storage
-    localStorage.setItem('averageCost', averageCost.toFixed(2));
+    localStorage.setItem("averageCost", averageCost.toFixed(2));
 
     return content;
   } catch (error) {
@@ -455,7 +445,7 @@ async function handleScoringAndReviewingLogic(
 
   // display the first answer results section
   document.getElementById("answer-1-results").textContent =
-    "Reviewing the user story now...";
+    "Scoring the user story now...";
   document.getElementById("answer-1").hidden = false;
 
   // building the scoring prompt and estimating tokens
@@ -474,6 +464,13 @@ async function handleScoringAndReviewingLogic(
 
   const scoringVariables = parseScoringResponse(scoringPromptResponse);
   const computedScore = computeScore(scoringVariables);
+  // just in case the latest percentage is undefined
+  const score = computedScore
+    ? `<strong>Your ${issueType} score is: ${computedScore}/100</strong> <br><br>`
+    : "";
+  document.getElementById(
+    "answer-1-results"
+  ).innerHTML = `${score}We're looking for ways to improve your user story now...`;
 
   //////////////////////////////////////// PROMPT 1 - REVIEWING PROMPT
   const reviewingPrompt = buildReviewingPrompt(
@@ -491,14 +488,13 @@ async function handleScoringAndReviewingLogic(
       },
     ]
   );
+  
+  const md = window.markdownit();
+  const result = md.render(reviewingPromptResponse);
 
-  // just in case the latest percentage is undefined
-  const score = computedScore
-    ? `<strong>Your ${issueType} score is: ${computedScore}/100</strong> <br><br>`
-    : "";
   document.getElementById(
     "answer-1-results"
-  ).innerHTML = `${score}${reviewingPromptResponse
+  ).innerHTML = `${score}${result
     .trim()
     .replace(/\n/g, "<br>")}`;
   document.getElementById("break-1").hidden = false;
