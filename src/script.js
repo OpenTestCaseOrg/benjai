@@ -18,50 +18,60 @@ function countTokens(str) {
 }
 
 function extractTestCasesFromMarkdown(markdown) {
+  const lines = markdown.split('\n');
   const testCases = [];
-  const testCaseSections = markdown.split(/\*\*Test case \d+: /).slice(1);
 
-  testCaseSections.forEach((section) => {
-    const [summary, ...rest] = section.split("\n");
+  let testCase = null;
+  let isHeader = false;  // flag to check if current row is a header row
+  for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
 
-    let prerequisite = null;
-    let startIndex = 0;
-    if (rest[0].startsWith("Prerequisite:")) {
-      prerequisite = rest[0].replace("Prerequisite:", "").trim();
-      startIndex = 1;
-    }
-
-    const steps = [];
-    for (let i = startIndex; i < rest.length; i++) {
-      const line = rest[i];
-      if (line.startsWith("|") && !line.startsWith("|---")) {
-        const [, action, result] = line.split("|").map((s) => s.trim());
-        steps.push({ action, result });
+      // Starting a new test case
+      if (line.startsWith("**Test Case")) {
+          testCase = {
+              summary: line.replace("**", "").trim(),
+              steps: []
+          };
+          testCases.push(testCase);
       }
-    }
-
-    testCases.push({ summary, prerequisite, steps });
-  });
+      // If the line starts with "|#", it's the header row
+      else if (line.startsWith("|#|")) {
+          isHeader = true;
+      }
+      // If the line starts with "|---|", it's the separator row and we reset the header flag
+      else if (line.startsWith("|---|")) {
+          isHeader = false;
+      }
+      // Extracting actions and results, but skip if it's a header row
+      else if (line.startsWith("|") && !isHeader && testCase) {
+          const parts = line.split('|').slice(1, -1);
+          if (parts.length >= 3) {
+              testCase.steps.push({
+                  action: parts[1].trim(),
+                  result: parts[2].trim()
+              });
+          }
+      }
+  }
 
   return testCases;
 }
 
+// generateCSV remains the same as before
 function generateCSV(markdown) {
   const testCases = extractTestCasesFromMarkdown(markdown);
-  let csvContent =
-    "TCID;Test Summary;Test Priority;Component;Component;Action;Data;Result\n";
+  let csvContent = "TCID;Test Summary;Test Priority;Component;Component;Action;Data;Result\n";
 
-  testCases.forEach((testCase, index) => {
-    const tcid = index;
-    score += 1;
+  testCases.forEach((testCase, tcIndex) => {
+      const tcid = tcIndex + 1;
 
-    testCase.steps.forEach((step, index) => {
-      if (index === 1) {
-        csvContent += `${tcid};${testCase.summary};;Component TBD;Component TBD;${step.action};;${step.result}\n`;
-      } else {
-        csvContent += `${tcid};;;;;${step.action};;${step.result}\n`;
-      }
-    });
+      testCase.steps.forEach((step, stepIndex) => {
+          if (stepIndex === 0) {
+              csvContent += `${tcid};${testCase.summary};;Component TBD;Component TBD;${step.action};;${step.result}\n`;
+          } else {
+              csvContent += `${tcid};;;;;${step.action};;${step.result}\n`;
+          }
+      });
   });
 
   return csvContent;
@@ -270,12 +280,15 @@ function buildTestCaseGeneratorPrompt(issueType, description, language) {
       Pour chaque cas de test, rédige toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. 
       Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.        
       Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
-      
+
       Formate l’output comme dans l'exemple suivant :
       **Titre du cas de test**
-      _Prérequis de test_
+      _Prérequis de test :_
+      1.Prérequis 1
+      2.Prérequis 2
+
       |#|Actions|Résultats attendus|
-      
+
       Langue = ${language}`;
 }
 
