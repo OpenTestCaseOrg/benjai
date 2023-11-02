@@ -249,9 +249,9 @@ function buildReviewingPrompt(issueType, description, language) {
 }
 
 function buildTestCaseGeneratorPrompt(issueType, description, language) {
-  const oldPrompt = `Voici une ${issueType}:
-    ${description}
-    Rôle = Expert QA
+  return `Voici une ${issueType}:
+      ${description}
+      Rôle = Expert QA
 
     Prompt = Génère un maximum de cas de test nécessaires pour couvrir à 100% cette ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
     Pour chaque cas de test, rédige les prérequis de test nécessaire.
@@ -268,28 +268,7 @@ function buildTestCaseGeneratorPrompt(issueType, description, language) {
     |#|Actions|Résultats attendus|
 
     Langue = ${language}
-    \`\`\`
-    `;
-
-  return `Voici une ${issueType}:
-      ${description}
-      Rôle = Expert QA
-
-      Prompt = Génère un maximum de cas de test nécessaires pour couvrir à 100% cette ${issueType} incluant les cas de test positifs, les cas de test négatifs et les edge cases.
-      Pour chaque cas de test, rédige les prérequis de test nécessaire.
-      Pour chaque cas de test, rédige toutes les étapes de test avec le maximum de détails sous la forme d’un tableau en markdown avec 1 colonne contenant toutes les actions précisément décrites et exhaustives et 1 colonne contenant les résultats attendus précisément décrits et exhaustifs. 
-      Donne un maximum d'actions par cas de test avec toutes les précisions de façon compréhensible et ordonnée.        
-      Enfin, en tenant compte des cas de test que tu as générés, complète la liste avec des cas de test supplémentaires et nouveaux.
-
-      Formate l’output comme dans l'exemple suivant :
-      **Titre du cas de test**
-      _Prérequis de test :_
-      1.Prérequis 1
-      2.Prérequis 2
-
-      |#|Actions|Résultats attendus|
-
-      Langue = ${language}`;
+    \`\`\``;
 }
 
 function buildTestCaseGeneratorGerkinPrompt(issueType, description, language) {

@@ -1725,6 +1725,10 @@ code {
   margin-top: 20px;
 }
 
+#answer-2-results ol {
+  list-style-type: decimal;
+}
+
 #loaded-xml-section #loaded-description{
   font-weight: bold;
 }
